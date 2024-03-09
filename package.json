@@ -10,8 +10,7 @@
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "bun run src/db/migrate.ts",
     "db:pull": "drizzle-kit introspect:pg",
-    "db:check": "drizzle-kit check:pg",
-    "postinstall": "bun run db:generate && bun run db:migrate"
+    "db:check": "drizzle-kit check:pg"
   },
   "dependencies": {
     "drizzle-orm": "^0.30.1",
