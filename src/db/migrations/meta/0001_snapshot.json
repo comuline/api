@@ -175,7 +175,7 @@
           "type": "sync_status",
           "primaryKey": false,
           "notNull": false,
-          "default": "'pending'"
+          "default": "'PENDING'"
         },
         "item": {
           "name": "item",
