@@ -12,4 +12,5 @@ try {
   process.exit(0)
 } catch (error) {
   logger.error(`Migration error: ${error}`)
+  process.exit(0)
 }
