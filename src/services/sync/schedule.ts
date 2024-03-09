@@ -79,10 +79,9 @@ export const syncItem = async (id: string) => {
       logger.info(`[SYNC][SCHEDULE][${id}] Inserted ${insert.length} rows`)
     } else {
       logger.error(
-        "[SYNC][SCHEDULE] Error fetch schedule data for: " +
-          id +
-          ". Trace: " +
+        `[SYNC][SCHEDULE][${id}] Error fetch schedule data. Trace: ${JSON.stringify(
           req
+        )}`
       )
       throw new Error("Failed to fetch schedule data for: " + id)
     }
