@@ -36,9 +36,9 @@ export const station = pgTable("station", {
 
 export const syncFromEnum = pgEnum("sync_from", ["cron", "manual"])
 export const syncStatusEnum = pgEnum("sync_status", [
-  "pending",
-  "success",
-  "failed",
+  "PENDING",
+  "SUCCESS",
+  "FAILED",
 ])
 
 export const syncItemEnum = pgEnum("sync_item", ["station", "schedule"])
@@ -47,7 +47,7 @@ export const sync = pgTable("sync", {
   id: uuid("id").defaultRandom().primaryKey().unique(),
   n: bigserial("n", { mode: "number" }),
   type: syncFromEnum("type").default("manual"),
-  status: syncStatusEnum("status").default("pending"),
+  status: syncStatusEnum("status").default("PENDING"),
   item: syncItemEnum("item"),
   duration: bigint("duration", {
     mode: "number",

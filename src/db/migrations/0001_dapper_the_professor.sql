@@ -11,7 +11,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "sync_status" AS ENUM('pending', 'success', 'failed');
+ CREATE TYPE "sync_status" AS ENUM('PENDING', 'SUCCESS', 'FAILED');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS "sync" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"n" bigserial NOT NULL,
 	"type" "sync_from" DEFAULT 'manual',
-	"status" "sync_status" DEFAULT 'pending',
+	"status" "sync_status" DEFAULT 'PENDING',
 	"item" "sync_item",
 	"duration" bigint DEFAULT 0,
 	"message" text DEFAULT NULL,

@@ -85,9 +85,7 @@
         "schedule_id_unique": {
           "name": "schedule_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     },
@@ -144,9 +142,7 @@
         "station_id_unique": {
           "name": "station_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     },
@@ -230,9 +226,7 @@
         "sync_id_unique": {
           "name": "sync_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     }
@@ -255,9 +249,9 @@
     "sync_status": {
       "name": "sync_status",
       "values": {
-        "pending": "pending",
-        "success": "success",
-        "failed": "failed"
+        "PENDING": "PENDING",
+        "SUCCESS": "SUCCESS",
+        "FAILED": "FAILED"
       }
     }
   },

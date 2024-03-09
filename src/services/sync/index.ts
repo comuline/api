@@ -22,7 +22,7 @@ export const syncService = {
       .then(async () => {
         const payload: Partial<NewSync> = {
           ...initalPayload,
-          status: "success",
+          status: "SUCCESS",
         }
         await db
           .insert(sync)
@@ -39,7 +39,7 @@ export const syncService = {
 
         const payload: Partial<NewSync> = {
           ...initalPayload,
-          status: "failed",
+          status: "FAILED",
           message: error,
         }
 
@@ -75,5 +75,12 @@ export const syncService = {
             },
           })
       })
+    return {
+      status: 200,
+      data: {
+        status: "PENDING",
+      },
+      message: "Syncing data station",
+    }
   },
 }
