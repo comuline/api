@@ -1,8 +1,10 @@
 import { Elysia } from "elysia"
+import { syncService } from "../services/sync"
 
 const syncController = (app: Elysia) =>
   app.group("/sync", (app) => {
-    app.post("/", async (ctx) => {
+    app.get("/", async (ctx) => {
+      await syncService.station()
       return "Sync"
     })
 
