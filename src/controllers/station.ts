@@ -4,6 +4,10 @@ import { syncService } from "../services/sync"
 const stationController = (app: Elysia) =>
   app.group("/station", (app) => {
     app.post("/", async (ctx) => {
+      if (process.env.NODE_ENV === "development") {
+        return await syncService.station()
+      }
+
       const token = ctx.headers["authorization"]
 
       if (!token) {
