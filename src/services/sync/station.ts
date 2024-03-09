@@ -9,7 +9,7 @@ export const syncStation = async () => {
       "https://api-partner.krl.co.id/krlweb/v1/krl-station"
     ).then((res) => res.json())
 
-    logger.info("[SYNC][STATION]: Fetched data from API")
+    logger.info("[SYNC][STATION] Fetched data from API")
 
     const schema = z.object({
       status: z.number(),
@@ -51,9 +51,9 @@ export const syncStation = async () => {
       })
       .returning()
 
-    logger.info(`[SYNC][STATION]: Inserted ${insert.length} rows`)
+    logger.info(`[SYNC][STATION] Inserted ${insert.length} rows`)
   } catch (e) {
-    logger.error("[SYNC][STATION]: Error", e)
+    logger.error("[SYNC][STATION] Error", e)
     throw e
   }
 }

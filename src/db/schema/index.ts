@@ -34,6 +34,8 @@ export const station = pgTable("station", {
   updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
 })
 
+export type NewStation = typeof station.$inferInsert
+
 export const syncFromEnum = pgEnum("sync_from", ["cron", "manual"])
 export const syncStatusEnum = pgEnum("sync_status", [
   "PENDING",
