@@ -1,5 +1,16 @@
 import { sql } from "drizzle-orm"
-import { boolean, integer, pgTable, text, time } from "drizzle-orm/pg-core"
+import {
+  bigint,
+  bigserial,
+  boolean,
+  date,
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  time,
+  uuid,
+} from "drizzle-orm/pg-core"
 
 export const schedule = pgTable("schedule", {
   id: text("id").primaryKey().unique(),
@@ -22,3 +33,29 @@ export const station = pgTable("station", {
   haveSchedule: boolean("have_schedule").default(sql`true`),
   updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
 })
+
+export const syncFromEnum = pgEnum("sync_from", ["cron", "manual"])
+export const syncStatusEnum = pgEnum("sync_status", [
+  "pending",
+  "success",
+  "failed",
+])
+
+export const syncItemEnum = pgEnum("sync_item", ["station", "schedule"])
+
+export const sync = pgTable("sync", {
+  id: uuid("id").defaultRandom().primaryKey().unique(),
+  n: bigserial("n", { mode: "number" }),
+  type: syncFromEnum("type").default("manual"),
+  status: syncStatusEnum("status").default("pending"),
+  item: syncItemEnum("item"),
+  duration: bigint("duration", {
+    mode: "number",
+  }).default(0),
+  message: text("message").default(sql`NULL`),
+  startedAt: text("started_at").default(sql`(CURRENT_TIMESTAMP)`),
+  endedAt: text("ended_at").default(sql`NULL`),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+})
+
+export type NewSync = typeof sync.$inferInsert
