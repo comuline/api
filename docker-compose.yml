@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: "postgres:15.2-alpine"
+    restart: always
+    container_name: "jadwal-krl-db"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    env_file:
+      - ./.env.db
+  redis:
+    image: redis
+    container_name: "jadwal-krl-cache"
+    ports:
+      - "6379:6379"
+  serverless-redis-http:
+    ports:
+      - "8079:80"
+    image: hiett/serverless-redis-http:latest
+    env_file:
+      - ./.env.cache
+
+volumes:
+  db:
