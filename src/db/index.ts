@@ -13,8 +13,8 @@ const dbSchema = {
   schedule,
 }
 
-const dbClient = drizzle(dbConnection, {
+const db = drizzle(dbConnection, {
   schema: dbSchema,
 })
 
-export { dbSchema, dbClient }
+export { dbSchema, db }
