@@ -8,6 +8,20 @@
       "when": 1709969312190,
       "tag": "0000_futuristic_colossus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709976152377,
+      "tag": "0001_dapper_the_professor",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709977069076,
+      "tag": "0002_foamy_psynapse",
+      "breakpoints": true
     }
   ]
 }
