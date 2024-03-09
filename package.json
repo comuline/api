@@ -16,6 +16,8 @@
     "drizzle-orm": "^0.30.1",
     "elysia": "latest",
     "pg": "^8.11.3",
+    "pino": "^8.19.0",
+    "pino-pretty": "^10.3.1",
     "postgres": "^3.4.3"
   },
   "devDependencies": {

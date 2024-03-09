@@ -1,5 +1,6 @@
 import { Elysia } from "elysia"
 import controllers from "./controllers"
+import { logger } from "./utils/log"
 
 const app = new Elysia().use(controllers).get("/", () => {
   return {
@@ -13,10 +14,10 @@ const app = new Elysia().use(controllers).get("/", () => {
 try {
   app.listen(3000)
 } catch (e) {
-  console.error("[MAIN]: Error starting server", e)
+  logger.error("[MAIN]: Error starting server", e)
   process.exit(1)
 }
 
-console.info(
+logger.info(
   `[MAIN]: Service is running at ${app.server?.hostname}:${app.server?.port}`
 )
