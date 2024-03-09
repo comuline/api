@@ -2,7 +2,6 @@ import Elysia, { NotFoundError } from "elysia"
 import { APIResponse } from "../commons/types"
 import scheduleController from "./schedule"
 import stationController from "./station"
-import syncController from "./sync"
 
 const controllers = new Elysia({ prefix: "/v1" })
   .onError((ctx) => {
@@ -16,6 +15,5 @@ const controllers = new Elysia({ prefix: "/v1" })
   })
   .use(stationController)
   .use(scheduleController)
-  .use(syncController)
 
 export default controllers
