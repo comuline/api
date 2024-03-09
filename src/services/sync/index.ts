@@ -78,6 +78,7 @@ export const syncService = {
     return {
       status: 200,
       data: {
+        id: initalPayload.id,
         status: "PENDING",
       },
       message: "Syncing data station",
