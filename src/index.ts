@@ -1,7 +1,22 @@
-import { Elysia } from "elysia";
+import { Elysia } from "elysia"
+import controllers from "./controllers"
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
+const app = new Elysia().use(controllers).get("/", () => {
+  return {
+    status: 200,
+    data: {
+      message: "OK",
+    },
+  }
+})
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+try {
+  app.listen(3000)
+} catch (e) {
+  console.error("[MAIN]: Error starting server", e)
+  process.exit(1)
+}
+
+console.info(
+  `[MAIN]: Service is running at ${app.server?.hostname}:${app.server?.port}`
+)
