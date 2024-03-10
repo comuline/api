@@ -1,5 +1,7 @@
-import { eq, sql } from "drizzle-orm"
+import { eq } from "drizzle-orm"
+import { InternalServerError } from "elysia"
 import { db, dbSchema } from "../../db"
+import { handleError } from "../../utils/error"
 import { logger } from "../../utils/log"
 
 export const getItemById = async (stationId: string) => {
@@ -15,6 +17,6 @@ export const getItemById = async (stationId: string) => {
 
     return station
   } catch (e) {
-    throw e
+    throw new InternalServerError(handleError(e))
   }
 }

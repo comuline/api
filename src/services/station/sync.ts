@@ -2,6 +2,8 @@ import { z } from "zod"
 import { db, dbSchema } from "../../db"
 import { logger } from "../../utils/log"
 import { sql } from "drizzle-orm"
+import { InternalServerError } from "elysia"
+import { handleError } from "../../utils/error"
 
 export const sync = async () => {
   try {
@@ -54,6 +56,6 @@ export const sync = async () => {
     logger.info(`[SYNC][STATION] Inserted ${insert.length} rows`)
   } catch (e) {
     logger.error("[SYNC][STATION] Error", e)
-    throw e
+    throw new InternalServerError(handleError(e))
   }
 }
