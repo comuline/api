@@ -39,3 +39,16 @@ export const scheduleResponseObject = {
   haveSchedule: t.Nullable(t.Boolean()),
   updatedAt: t.Nullable(t.String()),
 }
+
+export const syncResponseObject = {
+  id: t.Nullable(t.String()),
+  n: t.Number(),
+  type: t.Nullable(t.String()),
+  status: t.Nullable(t.String()),
+  item: t.Nullable(t.String()),
+  duration: t.Nullable(t.Number()),
+  message: t.Nullable(t.String()),
+  startedAt: t.Nullable(t.String()),
+  endedAt: t.Nullable(t.String()),
+  createdAt: t.Nullable(t.String()),
+}
