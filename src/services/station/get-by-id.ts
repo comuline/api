@@ -1,19 +1,19 @@
-import { sql } from "drizzle-orm"
-import { db } from "../../db"
+import { eq, sql } from "drizzle-orm"
+import { db, dbSchema } from "../../db"
 import { logger } from "../../utils/log"
 
 export const getItemById = async (stationId: string) => {
   try {
-    const stations = await db.execute(
-      sql`SELECT * FROM station WHERE id = ${stationId}`
-    )
+    const station = await db.query.station.findFirst({
+      where: eq(dbSchema.station.id, stationId),
+    })
 
-    if (stations.length === 0) {
+    if (!station) {
       logger.error(`[QUERY][STATION][${stationId}] Station data is not found`)
       return null
     }
 
-    return stations[0]
+    return station
   } catch (e) {
     throw e
   }

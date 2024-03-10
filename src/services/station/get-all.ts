@@ -1,12 +1,17 @@
-import { sql } from "drizzle-orm"
-import { db } from "../../db"
+import { asc, eq, sql } from "drizzle-orm"
+import { db, dbSchema } from "../../db"
 import { logger } from "../../utils/log"
 
 export const getAll = async () => {
   try {
-    const stations = await db.execute(
-      sql`SELECT * FROM station WHERE have_schedule = true ORDER BY id ASC, daop ASC, name ASC`
-    )
+    const stations = await db.query.station.findMany({
+      orderBy: [
+        asc(dbSchema.station.id),
+        asc(dbSchema.station.daop),
+        asc(dbSchema.station.name),
+      ],
+      where: eq(dbSchema.station.haveSchedule, true),
+    })
 
     if (stations.length === 0) {
       logger.error(`[QUERY][STATION][ALL] Stations data is not found`)
