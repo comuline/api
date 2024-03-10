@@ -90,7 +90,7 @@ export const syncItem = async (id: string) => {
   }
 }
 
-export const syncSchedule = async () => {
+export const sync = async () => {
   const stationsQuery = await db.query.station.findMany()
 
   const initialStations = await stationsQuery.map(({ id }) => id)
