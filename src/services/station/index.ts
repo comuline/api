@@ -1,9 +1,8 @@
-import { sql } from "drizzle-orm"
-import { db } from "../../db"
+import { NotFoundError } from "elysia"
 import { syncWrapper } from "../utils/sync"
-import { sync as syncStation } from "./sync"
 import { getAll } from "./get-all"
 import { getItemById } from "./get-by-id"
+import { sync as syncStation } from "./sync"
 
 export const station = {
   sync: async () => {
@@ -27,6 +26,10 @@ export const station = {
   },
   getById: async (id: string) => {
     const station = await getItemById(id)
+
+    if (!station) {
+      throw new NotFoundError("Station data is not found")
+    }
 
     return {
       status: 200,
