@@ -21,6 +21,14 @@ const stationController = (app: Elysia) =>
       return await service.station.sync()
     })
 
+    app.get("/", async (ctx) => {
+      return await service.station.getAll()
+    })
+
+    app.get("/:id", async (ctx) => {
+      return await service.station.getById(ctx.params.id)
+    })
+
     return app
   })
 
