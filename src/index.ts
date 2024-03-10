@@ -5,7 +5,10 @@ import swagger from "./commons/libs/swagger"
 
 const app = new Elysia()
   .use(controllers)
-  .get("/", () => {
+  .get("/", (ctx) => {
+    ctx.set.redirect = "/docs"
+  })
+  .get("/health", () => {
     return {
       status: 200,
       data: {
