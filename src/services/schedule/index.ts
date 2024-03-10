@@ -2,12 +2,13 @@ import { NotFoundError } from "elysia"
 import { syncWrapper } from "../utils/sync"
 import { getAll, getAllFromNow } from "./get-all"
 import { sync as syncSchedule } from "./sync"
+import { SyncType } from "../../commons/types"
 
 export const schedule = {
-  sync: async () => {
+  sync: async (type: SyncType) => {
     const data = await syncWrapper(syncSchedule, {
       item: "schedule",
-      type: "manual",
+      type,
     })()
 
     return {

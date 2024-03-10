@@ -6,7 +6,7 @@ export type APIResponse<T = unknown> = {
   message: "OK" | "ERROR" | "NOT_FOUND" | string
 }
 
-export const syncResponse = (item: "station" | "schedule") => ({
+export const syncResponse = (item: SyncItem) => ({
   200: t.Object(
     {
       status: t.Number(),
@@ -52,3 +52,7 @@ export const syncResponseObject = {
   endedAt: t.Nullable(t.String()),
   createdAt: t.Nullable(t.String()),
 }
+
+export type SyncType = "manual" | "cron"
+
+export type SyncItem = "station" | "schedule"

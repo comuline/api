@@ -3,12 +3,13 @@ import { syncWrapper } from "../utils/sync"
 import { getAll } from "./get-all"
 import { getItemById } from "./get-by-id"
 import { sync as syncStation } from "./sync"
+import { SyncType } from "../../commons/types"
 
 export const station = {
-  sync: async () => {
+  sync: async (type: SyncType) => {
     const data = await syncWrapper(syncStation, {
       item: "station",
-      type: "manual",
+      type,
     })()
 
     return {

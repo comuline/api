@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm"
 import { db, dbSchema } from "../../db"
 import { NewSync, sync } from "../../db/schema"
 import { handleError } from "../../commons/utils/error"
+import { SyncItem, SyncType } from "../../commons/types"
 
 /** A function wrapper utils to handle syncing status */
 export const syncWrapper =
@@ -12,8 +13,8 @@ export const syncWrapper =
       type,
     }: {
       // TODO: Change to infer type from dbSchema.sync
-      type: "cron" | "manual"
-      item: "station" | "schedule"
+      type: SyncType
+      item: SyncItem
     }
   ) =>
   async () => {
