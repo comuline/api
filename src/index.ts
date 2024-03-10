@@ -1,11 +1,14 @@
 import { Elysia } from "elysia"
 import controllers from "./controllers"
-import { logger } from "./utils/log"
+import { logger } from "./commons/utils/log"
 import swagger from "./commons/libs/swagger"
 
 const app = new Elysia()
   .use(controllers)
-  .get("/", () => {
+  .get("/", (ctx) => {
+    ctx.set.redirect = "/docs"
+  })
+  .get("/health", () => {
     return {
       status: 200,
       data: {

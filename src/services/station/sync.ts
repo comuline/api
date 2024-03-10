@@ -1,9 +1,9 @@
 import { z } from "zod"
 import { db, dbSchema } from "../../db"
-import { logger } from "../../utils/log"
+import { logger } from "../../commons/utils/log"
 import { sql } from "drizzle-orm"
 import { InternalServerError } from "elysia"
-import { handleError } from "../../utils/error"
+import { handleError } from "../../commons/utils/error"
 
 export const sync = async () => {
   try {

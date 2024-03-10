@@ -1,5 +1,6 @@
 import { Elysia, InternalServerError, t } from "elysia"
 import * as service from "../services"
+import { syncResponse } from "../commons/types"
 
 const scheduleController = (app: Elysia) =>
   app.group("/schedule", (app) => {
@@ -22,12 +23,16 @@ const scheduleController = (app: Elysia) =>
         return await service.schedule.sync()
       },
       {
-        headers: t.Object({
-          authorization: t.String(),
-        }),
+        headers:
+          process.env.NODE_ENV === "development"
+            ? undefined
+            : t.Object({
+                authorization: t.Nullable(t.String()),
+              }),
         detail: {
           description: "Sync schedule data",
         },
+        response: syncResponse("schedule"),
       }
     )
 

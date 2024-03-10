@@ -4,18 +4,18 @@ import { db, dbSchema } from "../../db"
 import { handleError } from "../../commons/utils/error"
 import { logger } from "../../commons/utils/log"
 
-export const getItemById = async (stationId: string) => {
+export const getItemById = async (syncId: string) => {
   try {
-    const station = await db.query.station.findFirst({
-      where: eq(dbSchema.station.id, stationId),
+    const item = await db.query.sync.findFirst({
+      where: eq(dbSchema.sync.id, syncId),
     })
 
-    if (!station) {
-      logger.error(`[QUERY][STATION][${stationId}] Station data is not found`)
+    if (!item) {
+      logger.error(`[QUERY][SYNC][${syncId}] Sync data is not found`)
       return null
     }
 
-    return station
+    return item
   } catch (e) {
     throw new InternalServerError(handleError(e))
   }

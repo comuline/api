@@ -1,34 +1,35 @@
 import { Elysia, InternalServerError, t } from "elysia"
 import * as service from "../services"
+import { scheduleResponseObject, syncResponse } from "../commons/types"
 
 const stationController = (app: Elysia) =>
   app.group("/station", (app) => {
     app.post(
       "/",
       async (ctx) => {
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === "development")
           return await service.station.sync()
-        }
 
         const token = ctx.headers.authorization
 
-        if (!token) {
-          throw new InternalServerError("Please provide a token")
-        }
+        if (!token) throw new InternalServerError("Please provide a token")
 
-        if (token.split(" ")[1] !== process.env.SYNC_TOKEN) {
+        if (token.split(" ")[1] !== process.env.SYNC_TOKEN)
           throw new InternalServerError("Invalid token")
-        }
 
         return await service.station.sync()
       },
       {
-        headers: t.Object({
-          authorization: t.String(),
-        }),
+        headers:
+          process.env.NODE_ENV === "development"
+            ? undefined
+            : t.Object({
+                authorization: t.Nullable(t.String()),
+              }),
         detail: {
           description: "Sync station data",
         },
+        response: syncResponse("station"),
       }
     )
 
@@ -54,16 +55,7 @@ const stationController = (app: Elysia) =>
           200: t.Object(
             {
               status: t.Number(),
-              data: t.Array(
-                t.Object({
-                  id: t.Nullable(t.String()),
-                  name: t.Nullable(t.String()),
-                  daop: t.Nullable(t.Number()),
-                  fgEnable: t.Nullable(t.Number()),
-                  haveSchedule: t.Nullable(t.Boolean()),
-                  updatedAt: t.Nullable(t.String()),
-                })
-              ),
+              data: t.Array(t.Object(scheduleResponseObject)),
             },
             {
               default: {
@@ -99,9 +91,9 @@ const stationController = (app: Elysia) =>
     app.get(
       "/:stationId",
       async (ctx) => {
-        if (ctx.params.stationId) {
+        if (ctx.params.stationId)
           throw new InternalServerError("Station ID is required")
-        }
+
         return await service.station.getById(ctx.params.stationId)
       },
       {
@@ -124,14 +116,7 @@ const stationController = (app: Elysia) =>
           200: t.Object(
             {
               status: t.Number(),
-              data: t.Object({
-                id: t.Nullable(t.String()),
-                name: t.Nullable(t.String()),
-                daop: t.Nullable(t.Number()),
-                fgEnable: t.Nullable(t.Number()),
-                haveSchedule: t.Nullable(t.Boolean()),
-                updatedAt: t.Nullable(t.String()),
-              }),
+              data: t.Object(scheduleResponseObject),
             },
             {
               default: {

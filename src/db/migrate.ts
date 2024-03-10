@@ -1,5 +1,5 @@
 import { migrate } from "drizzle-orm/postgres-js/migrator"
-import { logger } from "../utils/log"
+import { logger } from "../commons/utils/log"
 import { db } from "./index"
 
 // https://orm.drizzle.team/docs/migrations
