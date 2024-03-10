@@ -1,6 +1,6 @@
 import { Elysia, InternalServerError, t } from "elysia"
 import * as service from "../services"
-import { syncResponse } from "../commons/types"
+import { scheduleResponseObject, syncResponse } from "../commons/types"
 
 const stationController = (app: Elysia) =>
   app.group("/station", (app) => {
@@ -56,16 +56,7 @@ const stationController = (app: Elysia) =>
           200: t.Object(
             {
               status: t.Number(),
-              data: t.Array(
-                t.Object({
-                  id: t.Nullable(t.String()),
-                  name: t.Nullable(t.String()),
-                  daop: t.Nullable(t.Number()),
-                  fgEnable: t.Nullable(t.Number()),
-                  haveSchedule: t.Nullable(t.Boolean()),
-                  updatedAt: t.Nullable(t.String()),
-                })
-              ),
+              data: t.Array(t.Object(scheduleResponseObject)),
             },
             {
               default: {
@@ -123,32 +114,19 @@ const stationController = (app: Elysia) =>
               },
             }
           ),
-          200: t.Object(
-            {
-              status: t.Number(),
-              data: t.Object({
-                id: t.Nullable(t.String()),
-                name: t.Nullable(t.String()),
-                daop: t.Nullable(t.Number()),
-                fgEnable: t.Nullable(t.Number()),
-                haveSchedule: t.Nullable(t.Boolean()),
-                updatedAt: t.Nullable(t.String()),
-              }),
-            },
-            {
-              default: {
-                status: 200,
-                data: {
-                  id: "AC",
-                  name: "ANCOL",
-                  daop: 1,
-                  fgEnable: 1,
-                  haveSchedule: true,
-                  updatedAt: "2024-03-10T09:55:07.213Z",
-                },
+          200: t.Object(scheduleResponseObject, {
+            default: {
+              status: 200,
+              data: {
+                id: "AC",
+                name: "ANCOL",
+                daop: 1,
+                fgEnable: 1,
+                haveSchedule: true,
+                updatedAt: "2024-03-10T09:55:07.213Z",
               },
-            }
-          ),
+            },
+          }),
         },
         detail: {
           description: "Get a station data from a station ID",
