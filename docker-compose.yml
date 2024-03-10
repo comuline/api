@@ -16,12 +16,6 @@ services:
     container_name: "jadwal-krl-cache"
     ports:
       - "6379:6379"
-  serverless-redis-http:
-    ports:
-      - "8079:80"
-    image: hiett/serverless-redis-http:latest
-    env_file:
-      - ./.env.cache
 
 volumes:
   db:
