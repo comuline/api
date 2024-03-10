@@ -20,9 +20,12 @@ const stationController = (app: Elysia) =>
         return await service.station.sync()
       },
       {
-        headers: t.Object({
-          authorization: t.String(),
-        }),
+        headers:
+          process.env.NODE_ENV === "development"
+            ? undefined
+            : t.Object({
+                authorization: t.Nullable(t.String()),
+              }),
         detail: {
           description: "Sync station data",
         },
