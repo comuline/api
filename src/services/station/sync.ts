@@ -3,7 +3,7 @@ import { db, dbSchema } from "../../db"
 import { logger } from "../../utils/log"
 import { sql } from "drizzle-orm"
 
-export const syncStation = async () => {
+export const sync = async () => {
   try {
     const req = await fetch(
       "https://api-partner.krl.co.id/krlweb/v1/krl-station"

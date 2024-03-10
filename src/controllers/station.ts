@@ -1,11 +1,11 @@
 import { Elysia } from "elysia"
-import { syncService } from "../services/sync"
+import * as service from "../services"
 
 const stationController = (app: Elysia) =>
   app.group("/station", (app) => {
     app.post("/", async (ctx) => {
       if (process.env.NODE_ENV === "development") {
-        return await syncService.station()
+        return await service.station.sync()
       }
 
       const token = ctx.headers["authorization"]
@@ -18,7 +18,7 @@ const stationController = (app: Elysia) =>
         throw new Error("Invalid token")
       }
 
-      return await syncService.station()
+      return await service.station.sync()
     })
 
     return app
