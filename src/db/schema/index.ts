@@ -25,6 +25,8 @@ export const schedule = pgTable("schedule", {
   updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
 })
 
+export type Schedule = typeof schedule.$inferSelect
+
 export const station = pgTable("station", {
   id: text("id").primaryKey().unique(),
   name: text("name").default(sql`NULL`),
@@ -34,6 +36,7 @@ export const station = pgTable("station", {
   updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
 })
 
+export type Station = typeof station.$inferSelect
 export type NewStation = typeof station.$inferInsert
 
 export const syncFromEnum = pgEnum("sync_from", ["cron", "manual"])
