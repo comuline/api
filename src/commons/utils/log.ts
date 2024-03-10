@@ -15,7 +15,7 @@ const transport = pino.transport({
     {
       target: "@logtail/pino",
       options: { sourceToken: process.env.LOGS_BETTER_STACK_TOKEN }
-    }
+    }.
     {
       level: "trace",
       target: "pino-pretty",
