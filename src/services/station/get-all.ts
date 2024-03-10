@@ -3,9 +3,22 @@ import { InternalServerError } from "elysia"
 import { db, dbSchema } from "../../db"
 import { handleError } from "../../commons/utils/error"
 import { logger } from "../../commons/utils/log"
+import { Station } from "../../db/schema"
+import Cache from "../../commons/utils/cache"
 
 export const getAll = async () => {
   try {
+    const cache = new Cache<Station[]>("station-all", {
+      ttl:
+        60 *
+        new Date(Date.now()).getMinutes() *
+        new Date(Date.now()).getHours(),
+    })
+
+    const cached = await cache.get()
+
+    if (cached) return cached
+
     const stations = await db.query.station.findMany({
       orderBy: [
         asc(dbSchema.station.id),
@@ -21,6 +34,8 @@ export const getAll = async () => {
         "No station data is existing. Please sync station data first."
       )
     }
+
+    await cache.set(stations)
 
     return stations
   } catch (e) {
