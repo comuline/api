@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm"
 import { db, dbSchema } from "../../db"
 import { NewSync, sync } from "../../db/schema"
-import { handleError } from "../../utils/error"
+import { handleError } from "../../commons/utils/error"
 
 /** A function wrapper utils to handle syncing status */
 export const syncWrapper =

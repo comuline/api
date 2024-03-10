@@ -1,8 +1,8 @@
 import { asc, eq } from "drizzle-orm"
 import { InternalServerError } from "elysia"
 import { db, dbSchema } from "../../db"
-import { handleError } from "../../utils/error"
-import { logger } from "../../utils/log"
+import { handleError } from "../../commons/utils/error"
+import { logger } from "../../commons/utils/log"
 
 export const getAll = async () => {
   try {
