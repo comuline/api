@@ -89,16 +89,16 @@ const stationController = (app: Elysia) =>
     )
 
     app.get(
-      "/:stationId",
+      "/:id",
       async (ctx) => {
-        if (ctx.params.stationId)
+        if (!ctx.params.id)
           throw new InternalServerError("Station ID is required")
 
-        return await service.station.getById(ctx.params.stationId)
+        return await service.station.getById(ctx.params.id)
       },
       {
         params: t.Object({
-          stationId: t.String(),
+          id: t.String(),
         }),
         response: {
           404: t.Object(
