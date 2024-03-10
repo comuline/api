@@ -88,6 +88,8 @@ export const syncWrapper =
 
     return {
       id: initalPayload.id,
+      type,
+      item,
       status: "PENDING",
     }
   }
