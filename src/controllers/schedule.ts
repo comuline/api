@@ -39,7 +39,7 @@ const scheduleController = (app: Elysia) =>
     app.get(
       "/:stationId",
       async (ctx) => {
-        if (ctx.query.fromNow) {
+        if (ctx.query.from_now) {
           return await service.schedule.getAllFromNow(ctx.params.stationId)
         }
         return await service.schedule.getAll(ctx.params.stationId)
@@ -49,7 +49,7 @@ const scheduleController = (app: Elysia) =>
           stationId: t.String(),
         }),
         query: t.Object({
-          fromNow: t.Optional(t.BooleanString()),
+          from_now: t.Optional(t.BooleanString()),
         }),
         response: {
           404: t.Object(
