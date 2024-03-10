@@ -1,14 +1,17 @@
 import { Elysia, InternalServerError, t } from "elysia"
 import * as service from "../services"
-import { syncResponse } from "../commons/types"
+import { SyncType, syncResponse } from "../commons/types"
 
 const scheduleController = (app: Elysia) =>
   app.group("/schedule", (app) => {
     app.post(
       "/",
+
       async (ctx) => {
+        const type: SyncType = ctx.query.from_cron ? "cron" : "manual"
+
         if (process.env.NODE_ENV === "development") {
-          return await service.schedule.sync()
+          return await service.schedule.sync(type)
         }
         const token = ctx.headers.authorization
 
@@ -20,15 +23,18 @@ const scheduleController = (app: Elysia) =>
           throw new InternalServerError("Invalid token")
         }
 
-        return await service.schedule.sync()
+        return await service.schedule.sync(type)
       },
       {
         headers:
           process.env.NODE_ENV === "development"
             ? undefined
             : t.Object({
-                authorization: t.Nullable(t.String()),
+                authorization: t.String(),
               }),
+        query: t.Object({
+          from_cron: t.Optional(t.BooleanString()),
+        }),
         detail: {
           description: "Sync schedule data",
         },
