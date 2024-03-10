@@ -28,7 +28,26 @@ const scheduleController = (app: Elysia) =>
       }
     )
 
+    app.get("/", async (ctx) => {
+      throw new Error(
+        "Please provide a stationId. Example: /schedule/JAKK or /schedule/JAKK?fromNow=true"
+      )
     })
+
+    app.get(
+      "/:stationId",
+      async (ctx) => {
+        if (ctx.query.fromNow) {
+          return await service.schedule.getAllFromNow(ctx.params.stationId)
+        }
+        return await service.schedule.getAll(ctx.params.stationId)
+      },
+      {
+        query: t.Object({
+          fromNow: t.Optional(t.BooleanString()),
+        }),
+      }
+    )
 
     return app
   })
