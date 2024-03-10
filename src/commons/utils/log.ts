@@ -14,8 +14,8 @@ const transport = pino.transport({
     // https://betterstack.com/docs/logs/javascript/pino/
     {
       target: "@logtail/pino",
-      options: { sourceToken: process.env.LOGS_BETTER_STACK_TOKEN }
-    }.
+      options: { sourceToken: process.env.LOGS_BETTER_STACK_TOKEN },
+    },
     {
       level: "trace",
       target: "pino-pretty",
