@@ -7,19 +7,15 @@ const stationController = (app: Elysia) =>
     app.post(
       "/",
       async (ctx) => {
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === "development")
           return await service.station.sync()
-        }
 
         const token = ctx.headers.authorization
 
-        if (!token) {
-          throw new InternalServerError("Please provide a token")
-        }
+        if (!token) throw new InternalServerError("Please provide a token")
 
-        if (token.split(" ")[1] !== process.env.SYNC_TOKEN) {
+        if (token.split(" ")[1] !== process.env.SYNC_TOKEN)
           throw new InternalServerError("Invalid token")
-        }
 
         return await service.station.sync()
       },
@@ -92,9 +88,9 @@ const stationController = (app: Elysia) =>
     app.get(
       "/:stationId",
       async (ctx) => {
-        if (ctx.params.stationId) {
+        if (ctx.params.stationId)
           throw new InternalServerError("Station ID is required")
-        }
+
         return await service.station.getById(ctx.params.stationId)
       },
       {
