@@ -5,6 +5,8 @@ import { logger } from "../../utils/log"
 import { z } from "zod"
 import { NewStation } from "../../db/schema"
 import { sleep } from "bun"
+import { InternalServerError } from "elysia"
+import { handleError } from "../../utils/error"
 
 export const syncItem = async (id: string) => {
   try {
@@ -86,7 +88,7 @@ export const syncItem = async (id: string) => {
       throw new Error("Failed to fetch schedule data for: " + id)
     }
   } catch (e) {
-    throw e
+    throw new InternalServerError(handleError(e))
   }
 }
 
@@ -134,6 +136,6 @@ export const sync = async () => {
     }
     logger.info("[SYNC][SCHEDULE] Syncing schedule data finished")
   } catch (e) {
-    throw e
+    throw new InternalServerError(handleError(e))
   }
 }

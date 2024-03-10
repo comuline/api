@@ -1,3 +1,4 @@
+import { NotFoundError } from "elysia"
 import { syncWrapper } from "../utils/sync"
 import { getAll, getAllFromNow } from "./get-all"
 import { sync as syncSchedule } from "./sync"
@@ -17,6 +18,10 @@ export const schedule = {
   getAll: async (stationId: string) => {
     const schedules = await getAll(stationId)
 
+    if (!schedules) {
+      throw new NotFoundError("Schedule data is not found")
+    }
+
     return {
       status: 200,
       data: schedules,
@@ -24,6 +29,10 @@ export const schedule = {
   },
   getAllFromNow: async (stationId: string) => {
     const schedules = await getAllFromNow(stationId)
+
+    if (!schedules) {
+      throw new NotFoundError("Schedule data is not found")
+    }
 
     return {
       status: 200,

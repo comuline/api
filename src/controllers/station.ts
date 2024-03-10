@@ -1,4 +1,4 @@
-import { Elysia, t } from "elysia"
+import { Elysia, InternalServerError, t } from "elysia"
 import * as service from "../services"
 
 const stationController = (app: Elysia) =>
@@ -13,11 +13,11 @@ const stationController = (app: Elysia) =>
         const token = ctx.headers.authorization
 
         if (!token) {
-          throw new Error("Please provide a token")
+          throw new InternalServerError("Please provide a token")
         }
 
         if (token.split(" ")[1] !== process.env.SYNC_TOKEN) {
-          throw new Error("Invalid token")
+          throw new InternalServerError("Invalid token")
         }
 
         return await service.station.sync()
