@@ -5,6 +5,8 @@ import { logger } from "../../utils/log"
 import { z } from "zod"
 import { NewStation } from "../../db/schema"
 import { sleep } from "bun"
+import { InternalServerError } from "elysia"
+import { handleError } from "../../utils/error"
 
 export const syncItem = async (id: string) => {
   try {
@@ -79,19 +81,18 @@ export const syncItem = async (id: string) => {
       logger.info(`[SYNC][SCHEDULE][${id}] Inserted ${insert.length} rows`)
     } else {
       logger.error(
-        "[SYNC][SCHEDULE] Error fetch schedule data for: " +
-          id +
-          ". Trace: " +
+        `[SYNC][SCHEDULE][${id}] Error fetch schedule data. Trace: ${JSON.stringify(
           req
+        )}`
       )
       throw new Error("Failed to fetch schedule data for: " + id)
     }
   } catch (e) {
-    throw e
+    throw new InternalServerError(handleError(e))
   }
 }
 
-export const syncSchedule = async () => {
+export const sync = async () => {
   const stationsQuery = await db.query.station.findMany()
 
   const initialStations = await stationsQuery.map(({ id }) => id)
@@ -135,6 +136,6 @@ export const syncSchedule = async () => {
     }
     logger.info("[SYNC][SCHEDULE] Syncing schedule data finished")
   } catch (e) {
-    throw e
+    throw new InternalServerError(handleError(e))
   }
 }

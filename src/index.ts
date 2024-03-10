@@ -1,15 +1,19 @@
 import { Elysia } from "elysia"
 import controllers from "./controllers"
 import { logger } from "./utils/log"
+import swagger from "./commons/libs/swagger"
 
-const app = new Elysia().use(controllers).get("/", () => {
-  return {
-    status: 200,
-    data: {
-      message: "OK",
-    },
-  }
-})
+const app = new Elysia()
+  .use(controllers)
+  .get("/", () => {
+    return {
+      status: 200,
+      data: {
+        message: "OK",
+      },
+    }
+  })
+  .use(swagger())
 
 try {
   app.listen(3000)

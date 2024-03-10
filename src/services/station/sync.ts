@@ -2,8 +2,10 @@ import { z } from "zod"
 import { db, dbSchema } from "../../db"
 import { logger } from "../../utils/log"
 import { sql } from "drizzle-orm"
+import { InternalServerError } from "elysia"
+import { handleError } from "../../utils/error"
 
-export const syncStation = async () => {
+export const sync = async () => {
   try {
     const req = await fetch(
       "https://api-partner.krl.co.id/krlweb/v1/krl-station"
@@ -54,6 +56,6 @@ export const syncStation = async () => {
     logger.info(`[SYNC][STATION] Inserted ${insert.length} rows`)
   } catch (e) {
     logger.error("[SYNC][STATION] Error", e)
-    throw e
+    throw new InternalServerError(handleError(e))
   }
 }

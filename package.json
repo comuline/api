@@ -13,6 +13,7 @@
     "db:check": "drizzle-kit check:pg"
   },
   "dependencies": {
+    "@elysiajs/swagger": "^0.8.5",
     "drizzle-orm": "^0.30.1",
     "elysia": "latest",
     "pg": "^8.11.3",
