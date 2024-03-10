@@ -13,7 +13,6 @@ class Cache<T> {
 
   async set(value: T) {
     const self = this
-    console.log(self)
     await cache.set(
       self.key,
       typeof value === "string" ? value : JSON.stringify(value)
