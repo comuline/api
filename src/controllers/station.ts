@@ -114,19 +114,25 @@ const stationController = (app: Elysia) =>
               },
             }
           ),
-          200: t.Object(scheduleResponseObject, {
-            default: {
-              status: 200,
-              data: {
-                id: "AC",
-                name: "ANCOL",
-                daop: 1,
-                fgEnable: 1,
-                haveSchedule: true,
-                updatedAt: "2024-03-10T09:55:07.213Z",
-              },
+          200: t.Object(
+            {
+              status: t.Number(),
+              data: t.Object(scheduleResponseObject),
             },
-          }),
+            {
+              default: {
+                status: 200,
+                data: {
+                  id: "AC",
+                  name: "ANCOL",
+                  daop: 1,
+                  fgEnable: 1,
+                  haveSchedule: true,
+                  updatedAt: "2024-03-10T09:55:07.213Z",
+                },
+              },
+            }
+          ),
         },
         detail: {
           description: "Get a station data from a station ID",

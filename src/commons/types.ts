@@ -32,13 +32,10 @@ export const syncResponse = (item: "station" | "schedule") => ({
 })
 
 export const scheduleResponseObject = {
-  status: t.Number(),
-  data: t.Object({
-    id: t.Nullable(t.String()),
-    name: t.Nullable(t.String()),
-    daop: t.Nullable(t.Number()),
-    fgEnable: t.Nullable(t.Number()),
-    haveSchedule: t.Nullable(t.Boolean()),
-    updatedAt: t.Nullable(t.String()),
-  }),
+  id: t.Nullable(t.String()),
+  name: t.Nullable(t.String()),
+  daop: t.Nullable(t.Number()),
+  fgEnable: t.Nullable(t.Number()),
+  haveSchedule: t.Nullable(t.Boolean()),
+  updatedAt: t.Nullable(t.String()),
 }
