@@ -5,7 +5,5 @@ export function parseTime(timeString: string): Date {
   date.setMinutes(minutes ?? date.getMinutes())
   date.setSeconds(seconds ?? date.getSeconds())
 
-  date.setUTCHours(date.getUTCHours() + 7)
-
   return date
 }
