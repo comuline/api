@@ -45,10 +45,10 @@ const scheduleController = (app: Elysia) =>
     app.get(
       "/:stationId",
       async (ctx) => {
-        if (ctx.query.from_now) {
-          return await service.schedule.getAllFromNow(ctx.params.stationId)
-        }
-        return await service.schedule.getAll(ctx.params.stationId)
+        return await service.schedule.getAll(
+          ctx.params.stationId,
+          ctx.query.from_now ?? false
+        )
       },
       {
         params: t.Object({
