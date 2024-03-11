@@ -5,6 +5,7 @@ import { InternalServerError } from "elysia"
 import { handleError } from "../../commons/utils/error"
 import { Schedule } from "../../db/schema"
 import Cache from "../../commons/utils/cache"
+import { parseTime } from "../../commons/utils/date"
 
 export const getAll = async (stationId: string) => {
   try {
@@ -39,13 +40,24 @@ export const getAll = async (stationId: string) => {
 
 export const getAllFromNow = async (stationId: string) => {
   try {
-    const cache = new Cache<Schedule[]>(`schedule-${stationId}-from-now`, {
-      ttl: 60,
+    const cache = new Cache<Schedule[]>(`schedule-${stationId}`, {
+      ttl:
+        60 *
+        new Date(Date.now()).getMinutes() *
+        new Date(Date.now()).getHours(),
     })
 
     const cached = await cache.get()
 
-    if (cached) return cached
+    if (cached) {
+      const now = new Date(Date.now())
+      const schedules = cached.filter(
+        (s) =>
+          s.timeEstimated &&
+          new Date(parseTime(s.timeEstimated)).getTime() > now.getTime()
+      )
+      return schedules
+    }
 
     const schedules = await db.query.schedule.findMany({
       where: sql`station_id = ${stationId} AND time_estimated > (CURRENT_TIME AT TIME ZONE 'Asia/Jakarta')::time`,
