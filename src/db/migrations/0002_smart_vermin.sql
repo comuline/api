@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "station_idx" ON "schedule" ("station_id");
