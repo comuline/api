@@ -40,7 +40,7 @@ export const getAll = async (stationId: string) => {
 export const getAllFromNow = async (stationId: string) => {
   try {
     const cache = new Cache<Schedule[]>(`schedule-${stationId}-from-now`, {
-      ttl: 60 * 5,
+      ttl: 60,
     })
 
     const cached = await cache.get()
