@@ -49,10 +49,10 @@ cp .env.example .env
 bun db:generate && bun db:migrate
 ```
 
-6. Sync the data and populate it into your local database
+6. Sync the data and populate it into your local database (once only as you needed)
 
 ```bash
-# Please do this in order once
+# Please do this in order
 # 1. Sync station data and wait until it's done
 curl --request POST --url http://localhost:3000/v1/station/
 # 2. Sync schedule data
@@ -69,10 +69,10 @@ curl --request POST --url http://localhost:3000/v1/schedule/
 bun db:generate && bun db:migrate
 ```
 
-3. Sync the data and populate it into your remote database
+3. Sync the data and populate it into your remote database (once only as you needed)
 
 ```bash
-# Please do this in order once
+# Please do this in order
 # 1. Sync station data and wait until it's done
 curl --request POST --url http://localhost:3000/v1/station/
 # 2. Sync schedule data
@@ -91,10 +91,53 @@ openssl rand -base64 32
 
 3. Create a `Web Service` in [Render](https://render.com/), copy the `DATABASE_URL`, `REDIS_URL`, and `SYNC_TOKEN` as environment variables, and deploy the application.
 
-4. Set the cron job to fetch the schedule data using [Cron-Job](https://cron-job.org/en/). Don't forget to set the `SYNC_TOKEN` as a header in your request.
+4. Set the cron job to fetch the schedule data using [Cron-Job](https://cron-job.org/en/). Don't forget to set the `SYNC_TOKEN` as a header in your request. Add the `?from_cron=true` query parameter to flag the request as a cron job request.
 
 ```bash
 # Example
-curl --request POST --url https://your-service-name.onrender.com/v1/station/ -H "Authorization: Bearer ${SYNC_TOKEN}"
-curl --request POST --url https://your-service-name.onrender.com/v1/schedule/ -H "Authorization: Bearer ${SYNC_TOKEN}"
+curl --request POST --url https://your-service-name.onrender.com/v1/station?from_cron=true -H "Authorization: Bearer ${SYNC_TOKEN}"
+curl --request POST --url https://your-service-name.onrender.com/v1/schedule?from_cron=true -H "Authorization: Bearer ${SYNC_TOKEN}"
 ```
+
+### Database schema
+
+> **Station**
+
+| Column Name  | Data Type | Description                     |
+| ------------ | --------- | ------------------------------- |
+| id           | TEXT      | Primary key (Station ID)        |
+| name         | TEXT      | Station name                    |
+| daop         | INTEGER   | Station regional operation code |
+| fgEnable     | BOOLEAN   | -                               |
+| haveSchedule | BOOLEAN   | Schedule availability status    |
+| updatedAt    | TEXT      | Last updated date               |
+
+> **Schedule**
+
+| Column Name     | Data Type | Description                         |
+| --------------- | --------- | ----------------------------------- |
+| id              | TEXT      | Primary key (Station ID + Train ID) |
+| stationId       | TEXT      | Station ID                          |
+| trainId         | TEXT      | Train ID                            |
+| line            | TEXT      | Train commuter line                 |
+| route           | TEXT      | Train route                         |
+| color           | TEXT      | Commuter line color                 |
+| destination     | TEXT      | Train destination                   |
+| timeEstimated   | TIME      | Estimated time                      |
+| destinationTime | TIME      | Destination time                    |
+| updatedAt       | TEXT      | Last updated date                   |
+
+> **Sync**
+
+| Column Name | Data Type | Description                            |
+| ----------- | --------- | -------------------------------------- |
+| id          | TEXT      | Primary key (Sync ID)                  |
+| n           | BIGINT    | n of sync                              |
+| type        | ENUM      | Sync type (manual, cron)               |
+| status      | ENUM      | Sync status (PENDING, SUCCESS, FAILED) |
+| item        | ENUM      | Sync item (station, schedule)          |
+| duration    | BIGINT    | Sync duration                          |
+| message     | TEXT      | Sync message (if status failed)        |
+| startedAt   | TEXT      | Sync started date                      |
+| endedAt     | TEXT      | Sync ended date                        |
+| createdAt   | TEXT      | Sync created date                      |
