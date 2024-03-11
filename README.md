@@ -54,9 +54,9 @@ bun db:generate && bun db:migrate
 ```bash
 # Please do this in order
 # 1. Sync station data and wait until it's done
-curl --request POST --url http://localhost:3000/v1/station/
+curl --request POST --url http://localhost:3001/v1/station/
 # 2. Sync schedule data
-curl --request POST --url http://localhost:3000/v1/schedule/
+curl --request POST --url http://localhost:3001/v1/schedule/
 ```
 
 ### Deployment
@@ -74,9 +74,9 @@ bun db:generate && bun db:migrate
 ```bash
 # Please do this in order
 # 1. Sync station data and wait until it's done
-curl --request POST --url http://localhost:3000/v1/station/
+curl --request POST --url http://localhost:3001/v1/station/
 # 2. Sync schedule data
-curl --request POST --url http://localhost:3000/v1/schedule/
+curl --request POST --url http://localhost:3001/v1/schedule/
 
 ```
 

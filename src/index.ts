@@ -21,7 +21,7 @@ const app = new Elysia()
   .use(rateLimit())
 
 try {
-  app.listen(3000)
+  app.listen(process.env.NODE_ENV === "development" ? 3001 : 3000)
 } catch (e) {
   logger.error("[MAIN] Error starting server", e)
   process.exit(1)
