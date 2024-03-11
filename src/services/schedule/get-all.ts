@@ -1,13 +1,12 @@
 import { asc, eq, sql } from "drizzle-orm"
-import { db, dbSchema } from "../../db"
-import { logger } from "../../commons/utils/log"
 import { InternalServerError } from "elysia"
-import { handleError } from "../../commons/utils/error"
-import { Schedule } from "../../db/schema"
 import Cache from "../../commons/utils/cache"
-import { parseTime } from "../../commons/utils/date"
+import { handleError } from "../../commons/utils/error"
+import { logger } from "../../commons/utils/log"
+import { db, dbSchema } from "../../db"
+import { Schedule } from "../../db/schema"
 
-export const getAll = async (stationId: string, fromNow: boolean) => {
+export const getAll = async (stationId: string) => {
   try {
     const cache = new Cache<Schedule[]>(`schedule-${stationId}`, {
       ttl:
@@ -18,17 +17,7 @@ export const getAll = async (stationId: string, fromNow: boolean) => {
 
     const cached = await cache.get()
 
-    const now = new Date(Date.now())
-
-    if (cached) {
-      if (!fromNow) return cached
-      const schedules = cached.filter(
-        (s) =>
-          s.timeEstimated &&
-          new Date(parseTime(s.timeEstimated)).getTime() > now.getTime()
-      )
-      return schedules
-    }
+    if (cached) return cached
 
     const schedules = await db.query.schedule.findMany({
       where: eq(dbSchema.schedule.stationId, stationId),
@@ -42,13 +31,43 @@ export const getAll = async (stationId: string, fromNow: boolean) => {
 
     await cache.set(schedules)
 
-    if (!fromNow) return schedules
+    return schedules
+  } catch (e) {
+    throw new InternalServerError(handleError(e))
+  }
+}
 
-    return schedules.filter(
-      (s) =>
-        s.timeEstimated &&
-        new Date(parseTime(s.timeEstimated)).getTime() > now.getTime()
-    )
+export const getAllFromNow = async (stationId: string) => {
+  try {
+    const now = new Date()
+
+    const currentSecond = now.getSeconds()
+
+    const minutes = now.getMinutes()
+
+    const cache = new Cache<Schedule[]>(`schedule-${stationId}-${minutes}`, {
+      ttl: 60 - currentSecond,
+    })
+
+    const cached = await cache.get()
+
+    if (cached) return cached
+
+    const schedules = await db.query.schedule.findMany({
+      where: sql`station_id = ${stationId} AND time_estimated > (CURRENT_TIME AT TIME ZONE 'Asia/Jakarta')::time`,
+      orderBy: [asc(dbSchema.schedule.timeEstimated)],
+    })
+
+    if (schedules.length === 0) {
+      logger.error(
+        `[QUERY][SCHEDULE][${stationId}] Schedule data from now is not found`
+      )
+      return null
+    }
+
+    await cache.set(schedules)
+
+    return schedules
   } catch (e) {
     throw new InternalServerError(handleError(e))
   }
