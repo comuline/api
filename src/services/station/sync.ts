@@ -7,6 +7,8 @@ import { handleError } from "../../commons/utils/error"
 
 export const sync = async () => {
   try {
+    logger.info("[SYNC][STATION] Syncing station data started")
+
     const req = await fetch(
       "https://api-partner.krl.co.id/krlweb/v1/krl-station"
     ).then((res) => res.json())
@@ -54,6 +56,7 @@ export const sync = async () => {
       .returning()
 
     logger.info(`[SYNC][STATION] Inserted ${insert.length} rows`)
+    logger.info("[SYNC][STATION] Syncing station data finished")
   } catch (e) {
     logger.error("[SYNC][STATION] Error", e)
     throw new InternalServerError(handleError(e))
