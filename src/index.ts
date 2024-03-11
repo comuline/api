@@ -2,6 +2,7 @@ import { Elysia } from "elysia"
 import controllers from "./controllers"
 import { logger } from "./commons/utils/log"
 import swagger from "./commons/libs/swagger"
+import { rateLimit } from "elysia-rate-limit"
 
 const app = new Elysia()
   .use(controllers)
@@ -17,6 +18,7 @@ const app = new Elysia()
     }
   })
   .use(swagger())
+  .use(rateLimit())
 
 try {
   app.listen(3000)
