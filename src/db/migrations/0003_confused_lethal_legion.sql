@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "time_estimated_idx" ON "schedule" ("time_estimated");

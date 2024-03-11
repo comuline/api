@@ -30,6 +30,7 @@ export const schedule = pgTable(
   (table) => {
     return {
       stationIdx: index("station_idx").on(table.stationId),
+      timeEstimatedIdx: index("time_estimated_idx").on(table.timeEstimated),
     }
   }
 )

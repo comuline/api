@@ -22,6 +22,13 @@
       "when": 1710153775566,
       "tag": "0002_smart_vermin",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1710159697753,
+      "tag": "0003_confused_lethal_legion",
+      "breakpoints": true
     }
   ]
 }
