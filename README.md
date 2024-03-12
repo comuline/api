@@ -1,6 +1,6 @@
 # Jadwal KRL API
 
-An API to get the schedule of KRL commuter line in Jakarta and Yogyakarta using [Elsyia](https://elysiajs.com/) and [Bun](https://bun.sh/), deployed to [Render](https://render.com/).
+An API to get the schedule of KRL commuter line in Jakarta and Yogyakarta using [Elsyia](https://elysiajs.com/) and [Bun](https://bun.sh/), deployed to [Render](https://render.com/). This API is primarily used on [jadwal-krl.com](https://jadwal-krl.com/) web app ([source code](https://github.com/abielzulio/jadwal-krl)).
 
 ### How does it work?
 
