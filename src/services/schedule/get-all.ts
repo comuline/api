@@ -59,7 +59,7 @@ export const getAllFromNow = async (stationId: string) => {
     })
 
     if (schedules.length === 0) {
-      logger.error(
+      logger.warn(
         `[QUERY][SCHEDULE][${stationId}] Schedule data from now is not found`
       )
       return null
