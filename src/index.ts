@@ -18,7 +18,7 @@ const app = new Elysia()
     }
   })
   .use(swagger())
-  .use(rateLimit())
+  .use(rateLimit({ max: 5 }))
 
 try {
   app.listen(process.env.NODE_ENV === "development" ? 3001 : 3000)
