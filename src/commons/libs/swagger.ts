@@ -6,8 +6,8 @@ const swagger = () =>
     exclude: ["/docs", "/docs/json", "/", "/health"],
     documentation: {
       info: {
-        title: "Jadwal KRL API",
-        description: "API documentation for Jadwal KRL",
+        title: "Comuline API",
+        description: "API documentation for Comuline API",
         version: "1.0.0",
       },
     },

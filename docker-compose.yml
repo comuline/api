@@ -4,7 +4,7 @@ services:
   postgres:
     image: "postgres:15.2-alpine"
     restart: always
-    container_name: "jadwal-krl-db"
+    container_name: "comuline-db"
     ports:
       - "5432:5432"
     volumes:
@@ -13,7 +13,7 @@ services:
       - ./.env.db
   redis:
     image: redis
-    container_name: "jadwal-krl-cache"
+    container_name: "comuline-cache"
     ports:
       - "6379:6379"
 
