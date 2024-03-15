@@ -1,5 +1,10 @@
 {
-  "name": "jadwal-krl-api",
+  "name": "@comuline/api",
+  "author": {
+    "name": "Comuline",
+    "url": "https://github.com/comuline",
+    "email": "support@comuline.com"
+  },
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
