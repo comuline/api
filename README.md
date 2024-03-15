@@ -1,10 +1,10 @@
-# Jadwal KRL API
+# @comuline/api
 
-An API to get the schedule of KRL commuter line in Jakarta and Yogyakarta using [Elsyia](https://elysiajs.com/) and [Bun](https://bun.sh/), deployed to [Render](https://render.com/). This API is primarily used on [jadwal-krl.com](https://jadwal-krl.com/) web app ([source code](https://github.com/abielzulio/jadwal-krl)).
+An API to get the schedule of KRL commuter line in Jakarta and Yogyakarta using [Elsyia](https://elysiajs.com/) and [Bun](https://bun.sh/), deployed to [Render](https://render.com/). This API is primarily used on the [web app](https://comuline.com/) ([source code](https://github.com/comuline/web)).
 
 ### How does it work?
 
-This API uses a daily cron job (at 00:00) to fetch the schedule of KRL commuter line in Jakarta and Yogyakarta from the official website of PT. KAI. The data is then processed and stored in a PostgreSQL database and cached in a Redis (for every once read request). All endpoints can be found in the [docs](https://www.api.jadwal-krl.com/docs).
+This API uses a daily cron job (at 00:00) to fetch the schedule of KRL commuter line in Jakarta and Yogyakarta from the official website of PT. KAI. The data is then processed and stored in a PostgreSQL database and cached in a Redis (for every once read request). All endpoints can be found in the [docs](https://www.api.comuline.com/docs).
 
 ### Technology stacks
 
@@ -22,7 +22,7 @@ This API uses a daily cron job (at 00:00) to fetch the schedule of KRL commuter 
 1. Clone the repository
 
 ```bash
-git clone https://github.com/abielzulio/jadwal-krl-api.git
+git clone https://github.com/comuline/api.git
 ```
 
 2. Install the dependencies
