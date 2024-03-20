@@ -6,17 +6,16 @@ import { logger } from "../../commons/utils/log"
 import { db, dbSchema } from "../../db"
 import { Schedule } from "../../db/schema"
 
-const CACHE_TTL = 60 * 24
-
-function getCurrentTimeInMinutes(): number {
-  const now = new Date()
-  return now.getMinutes() * now.getHours()
+function getSecondsRemainingFromNow(): number {
+  return (
+    60 * new Date(Date.now()).getMinutes() * new Date(Date.now()).getHours()
+  )
 }
 
 export const getAll = async (trainId: string) => {
   try {
     const cache = new Cache<Schedule[]>(`route-${trainId}`, {
-      ttl: CACHE_TTL * getCurrentTimeInMinutes(),
+      ttl: getSecondsRemainingFromNow(),
     })
 
     const cached = await cache.get()
@@ -44,7 +43,7 @@ export const getAll = async (trainId: string) => {
 export const getAllFrom = async (trainId: string, fromStationId?: string) => {
   try {
     const cache = new Cache<Schedule[]>(`route-${trainId}-${fromStationId}`, {
-      ttl: CACHE_TTL * getCurrentTimeInMinutes(),
+      ttl: getSecondsRemainingFromNow(),
     })
 
     const cached = await cache.get()
