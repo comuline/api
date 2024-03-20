@@ -24,10 +24,10 @@ const swagger = () =>
           description: "Route related endpoints",
         },
         {
-          name: "Util",
-          description: "Util related endpoints",
-        }
-      ]
+          name: "Utility",
+          description: "Utility related endpoints",
+        },
+      ],
     },
   })
 

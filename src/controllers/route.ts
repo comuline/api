@@ -7,14 +7,19 @@ const routeController = (app: Elysia) =>
     app.get(
       "/:trainId",
       async (ctx) => {
-        return await service.route.getAll(ctx.params.trainId, ctx.query.from?.toLocaleUpperCase())
+        if (ctx.query.from_station_id)
+          return await service.route.getAllFrom(
+            ctx.params.trainId,
+            ctx.query.from_station_id.toLocaleUpperCase(),
+          )
+        return await service.route.getAll(ctx.params.trainId)
       },
       {
         params: t.Object({
           trainId: t.String(),
         }),
         query: t.Object({
-          from: t.Optional(t.String()),
+          from_station_id: t.Optional(t.String()),
         }),
         response: {
           404: t.Object(
@@ -300,7 +305,7 @@ const routeController = (app: Elysia) =>
         detail: {
           description:
             "Get a list of schedule data for a train route from a train ID sorted by timeEstimated",
-          tags: ["Route"]
+          tags: ["Route"],
         },
       },
     )

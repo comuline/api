@@ -52,7 +52,7 @@ const syncController = (app: Elysia) =>
 
         detail: {
           description: "Get the most updated 20 sync data",
-          tags: ["Util"]
+          tags: ["Utility"],
         },
       },
     )
@@ -107,7 +107,7 @@ const syncController = (app: Elysia) =>
 
         detail: {
           description: "Get a sync data item",
-          tags: ["Util"]
+          tags: ["Utility"],
         },
       },
     )

@@ -7,3 +7,9 @@ export function parseTime(timeString: string): Date {
 
   return date
 }
+
+export function getSecondsRemainingFromNow(): number {
+  return (
+    60 * new Date(Date.now()).getMinutes() * new Date(Date.now()).getHours()
+  )
+}

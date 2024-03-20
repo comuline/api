@@ -37,7 +37,7 @@ const stationController = (app: Elysia) =>
         }),
         detail: {
           description: "Sync station data",
-          tags: ["Station"]
+          tags: ["Station"],
         },
         response: syncResponse("station"),
       },
@@ -94,7 +94,7 @@ const stationController = (app: Elysia) =>
         },
         detail: {
           description: "Get a list of station data",
-          tags: ["Station"]
+          tags: ["Station"],
         },
       },
     )
@@ -105,7 +105,7 @@ const stationController = (app: Elysia) =>
         if (!ctx.params.id)
           throw new InternalServerError("Station ID is required")
 
-        return await service.station.getById(ctx.params.id)
+        return await service.station.getById(ctx.params.id.toLocaleUpperCase())
       },
       {
         params: t.Object({
@@ -146,7 +146,7 @@ const stationController = (app: Elysia) =>
         },
         detail: {
           description: "Get a station data from a station ID",
-          tags: ["Station"]
+          tags: ["Station"],
         },
       },
     )

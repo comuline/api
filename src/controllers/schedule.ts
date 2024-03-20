@@ -6,7 +6,6 @@ const scheduleController = (app: Elysia) =>
   app.group("/schedule", (app) => {
     app.post(
       "/",
-
       async (ctx) => {
         const type: SyncType = ctx.query.from_cron ? "cron" : "manual"
 
@@ -37,7 +36,7 @@ const scheduleController = (app: Elysia) =>
         }),
         detail: {
           description: "Sync schedule data",
-          tags: ["Schedule"]
+          tags: ["Schedule"],
         },
         response: syncResponse("schedule"),
       },
@@ -47,8 +46,8 @@ const scheduleController = (app: Elysia) =>
       "/:stationId",
       async (ctx) => {
         return await service.schedule.getAll(
-          ctx.params.stationId,
-          ctx.query.from_now ?? false,
+          ctx.params.stationId.toLocaleUpperCase(),
+          ctx.query.is_from_now ?? false,
         )
       },
       {
@@ -56,7 +55,7 @@ const scheduleController = (app: Elysia) =>
           stationId: t.String(),
         }),
         query: t.Object({
-          from_now: t.Optional(t.BooleanString()),
+          is_from_now: t.Optional(t.BooleanString()),
         }),
         response: {
           404: t.Object(
@@ -126,7 +125,7 @@ const scheduleController = (app: Elysia) =>
         detail: {
           description:
             "Get a list of schedule data for a station from a station ID",
-          tags: ["Schedule"]
+          tags: ["Schedule"],
         },
       },
     )
