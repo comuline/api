@@ -1,4 +1,4 @@
-import { asc, eq, sql } from "drizzle-orm"
+import { asc, eq } from "drizzle-orm"
 import { InternalServerError } from "elysia"
 import Cache from "../../commons/utils/cache"
 import { handleError } from "../../commons/utils/error"
@@ -8,7 +8,7 @@ import { Schedule } from "../../db/schema"
 
 export const getAll = async (trainId: string) => {
   try {
-    const cache = new Cache<Schedule[]>(`ROUTE-${trainId}`, {
+    const cache = new Cache<Schedule[]>(`route-${trainId}`, {
       ttl:
         60 *
         new Date(Date.now()).getMinutes() *
