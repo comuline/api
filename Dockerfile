@@ -6,7 +6,7 @@ COPY package.json .
 COPY bun.lockb .
 
 # TODO: RUN MIGRATION ON PRODUCTION, HOW TF DO I DO THAT?
-RUN bun install --production
+RUN bun install
 
 COPY src src
 COPY tsconfig.json .
