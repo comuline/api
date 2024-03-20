@@ -7,14 +7,14 @@ const routeController = (app: Elysia) =>
     app.get(
       "/:trainId",
       async (ctx) => {
-        return await service.route.getAll(ctx.params.trainId)
+        return await service.route.getAll(ctx.params.trainId, ctx.query.from?.toLocaleUpperCase())
       },
       {
         params: t.Object({
           trainId: t.String(),
         }),
         query: t.Object({
-          from_now: t.Optional(t.BooleanString()),
+          from: t.Optional(t.String()),
         }),
         response: {
           404: t.Object(

@@ -2,8 +2,8 @@ import { NotFoundError } from "elysia"
 import { getAll } from "./get-all"
 
 export const route = {
-  getAll: async (trainId: string) => {
-    const routes = await getAll(trainId)
+  getAll: async (trainId: string, fromStationId?: string) => {
+    const routes = await getAll(trainId, fromStationId)
 
     if (!routes) {
       throw new NotFoundError("Route data is not found")
