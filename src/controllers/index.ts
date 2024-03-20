@@ -19,5 +19,4 @@ const controllers = new Elysia({ prefix: "/v1" })
   .use(routeController)
   .use(syncController)
 
-
 export default controllers
