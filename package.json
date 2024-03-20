@@ -1,5 +1,10 @@
 {
-  "name": "jadwal-krl-api",
+  "name": "@comuline/api",
+  "author": {
+    "name": "Comuline",
+    "url": "https://github.com/comuline",
+    "email": "support@comuline.com"
+  },
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +15,10 @@
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "bun run src/db/migrate.ts",
     "db:pull": "drizzle-kit introspect:pg",
-    "db:check": "drizzle-kit check:pg"
+    "db:check": "drizzle-kit check:pg",
+    "format": "prettier -w .",
+    "format:check": "prettier -c .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@elysiajs/swagger": "^0.8.5",
@@ -26,7 +34,15 @@
   },
   "devDependencies": {
     "bun-types": "latest",
-    "drizzle-kit": "^0.20.14"
+    "drizzle-kit": "^0.20.14",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5"
   },
-  "module": "src/index.js"
+  "module": "src/index.js",
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "prettier -w"
+    ]
+  }
 }

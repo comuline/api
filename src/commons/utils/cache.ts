@@ -15,7 +15,7 @@ class Cache<T> {
     const self = this
     await cache.set(
       self.key,
-      typeof value === "string" ? value : JSON.stringify(value)
+      typeof value === "string" ? value : JSON.stringify(value),
     )
     if (self.ttl) return await cache.expire(self.key, self.ttl)
 

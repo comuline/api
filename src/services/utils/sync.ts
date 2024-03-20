@@ -15,7 +15,7 @@ export const syncWrapper =
       // TODO: Change to infer type from dbSchema.sync
       type: SyncType
       item: SyncItem
-    }
+    },
   ) =>
   async () => {
     const start = await db

@@ -31,7 +31,7 @@ export const getAll = async () => {
     if (stations.length === 0) {
       logger.error(`[QUERY][STATION][ALL] Stations data is not found`)
       throw new Error(
-        "No station data is existing. Please sync station data first."
+        "No station data is existing. Please sync station data first.",
       )
     }
 

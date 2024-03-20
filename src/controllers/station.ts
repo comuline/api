@@ -37,9 +37,10 @@ const stationController = (app: Elysia) =>
         }),
         detail: {
           description: "Sync station data",
+          tags: ["Station"]
         },
         response: syncResponse("station"),
-      }
+      },
     )
 
     app.get(
@@ -59,7 +60,7 @@ const stationController = (app: Elysia) =>
                 status: 404,
                 message: "Station data is not found",
               },
-            }
+            },
           ),
           200: t.Object(
             {
@@ -88,13 +89,14 @@ const stationController = (app: Elysia) =>
                   },
                 ],
               },
-            }
+            },
           ),
         },
         detail: {
           description: "Get a list of station data",
+          tags: ["Station"]
         },
-      }
+      },
     )
 
     app.get(
@@ -120,7 +122,7 @@ const stationController = (app: Elysia) =>
                 status: 404,
                 message: "Station data is not found",
               },
-            }
+            },
           ),
           200: t.Object(
             {
@@ -139,13 +141,14 @@ const stationController = (app: Elysia) =>
                   updatedAt: "2024-03-10T09:55:07.213Z",
                 },
               },
-            }
+            },
           ),
         },
         detail: {
           description: "Get a station data from a station ID",
+          tags: ["Station"]
         },
-      }
+      },
     )
 
     return app

@@ -10,7 +10,7 @@ export const sync = async () => {
     logger.info("[SYNC][STATION] Syncing station data started")
 
     const req = await fetch(
-      "https://api-partner.krl.co.id/krlweb/v1/krl-station"
+      "https://api-partner.krl.co.id/krlweb/v1/krl-station",
     ).then((res) => res.json())
 
     logger.info("[SYNC][STATION] Fetched data from API")
@@ -24,7 +24,7 @@ export const sync = async () => {
           sta_name: z.string(),
           group_wil: z.number(),
           fg_enable: z.number(),
-        })
+        }),
       ),
     })
 
@@ -42,7 +42,7 @@ export const sync = async () => {
             fgEnable: s.fg_enable,
             daop: s.group_wil === 0 ? 1 : s.group_wil,
           }
-        })
+        }),
       )
       .onConflictDoUpdate({
         target: dbSchema.station.id,

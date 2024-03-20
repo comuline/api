@@ -37,9 +37,10 @@ const scheduleController = (app: Elysia) =>
         }),
         detail: {
           description: "Sync schedule data",
+          tags: ["Schedule"]
         },
         response: syncResponse("schedule"),
-      }
+      },
     )
 
     app.get(
@@ -47,7 +48,7 @@ const scheduleController = (app: Elysia) =>
       async (ctx) => {
         return await service.schedule.getAll(
           ctx.params.stationId,
-          ctx.query.from_now ?? false
+          ctx.query.from_now ?? false,
         )
       },
       {
@@ -68,7 +69,7 @@ const scheduleController = (app: Elysia) =>
                 status: 404,
                 message: "Schedule data is not found",
               },
-            }
+            },
           ),
           200: t.Object(
             {
@@ -85,7 +86,7 @@ const scheduleController = (app: Elysia) =>
                   timeEstimated: t.Nullable(t.String()),
                   destinationTime: t.Nullable(t.String()),
                   updatedAt: t.Nullable(t.String()),
-                })
+                }),
               ),
             },
             {
@@ -118,15 +119,16 @@ const scheduleController = (app: Elysia) =>
                   },
                 ],
               },
-            }
+            },
           ),
         },
 
         detail: {
           description:
             "Get a list of schedule data for a station from a station ID",
+          tags: ["Schedule"]
         },
-      }
+      },
     )
 
     return app
