@@ -5,12 +5,7 @@ import { handleError } from "../../commons/utils/error"
 import { logger } from "../../commons/utils/log"
 import { db, dbSchema } from "../../db"
 import { Schedule } from "../../db/schema"
-
-function getSecondsRemainingFromNow(): number {
-  return (
-    60 * new Date(Date.now()).getMinutes() * new Date(Date.now()).getHours()
-  )
-}
+import { getSecondsRemainingFromNow } from "../../commons/utils/date"
 
 export const getAll = async (trainId: string) => {
   try {
