@@ -6,13 +6,14 @@ import { logger } from "../../commons/utils/log"
 import { db, dbSchema } from "../../db"
 import { Schedule } from "../../db/schema"
 
-function popSchedules(schedules: Schedule[], stationId: string) {
-  const index = schedules.findIndex(item => item.stationId === stationId);
-  if (index > 0) {
-      return schedules.splice(index, schedules.length - 1); 
-  } else {
-      return schedules;
+function popSchedules(schedules: Schedule[], fromStationId?: string): Schedule[] {
+  if (fromStationId) {
+    const index = schedules.findIndex(item => item.stationId === fromStationId);
+    if (index >= 0) {
+      return schedules.slice(index);
+    } 
   }
+  return schedules;
 }
 
 export const getAll = async (trainId: string, fromStationId?: string) => {
@@ -27,8 +28,7 @@ export const getAll = async (trainId: string, fromStationId?: string) => {
     const cached = await cache.get()
 
     if (cached) {
-      if (fromStationId) return popSchedules(cached, fromStationId)
-      return cached
+      return popSchedules(cached, fromStationId);
     }
 
     const schedules = await db.query.schedule.findMany({
@@ -43,9 +43,7 @@ export const getAll = async (trainId: string, fromStationId?: string) => {
 
     await cache.set(schedules)
 
-    if (fromStationId) return popSchedules(schedules, fromStationId)
-
-    return schedules
+    return popSchedules(schedules, fromStationId);
   } catch (e) {
     throw new InternalServerError(handleError(e))
   }
