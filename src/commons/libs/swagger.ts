@@ -10,6 +10,24 @@ const swagger = () =>
         description: "API documentation for Comuline API",
         version: "1.0.0",
       },
+      tags: [
+        {
+          name: "Station",
+          description: "Station related endpoints",
+        },
+        {
+          name: "Schedule",
+          description: "Schedule related endpoints",
+        },
+        {
+          name: "Route",
+          description: "Route related endpoints",
+        },
+        {
+          name: "Util",
+          description: "Util related endpoints",
+        }
+      ]
     },
   })
 

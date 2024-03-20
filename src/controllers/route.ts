@@ -300,6 +300,7 @@ const routeController = (app: Elysia) =>
         detail: {
           description:
             "Get a list of schedule data for a train route from a train ID sorted by timeEstimated",
+          tags: ["Route"]
         },
       },
     )

@@ -37,6 +37,7 @@ const scheduleController = (app: Elysia) =>
         }),
         detail: {
           description: "Sync schedule data",
+          tags: ["Schedule"]
         },
         response: syncResponse("schedule"),
       },
@@ -125,6 +126,7 @@ const scheduleController = (app: Elysia) =>
         detail: {
           description:
             "Get a list of schedule data for a station from a station ID",
+          tags: ["Schedule"]
         },
       },
     )

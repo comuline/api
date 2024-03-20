@@ -16,7 +16,8 @@ const controllers = new Elysia({ prefix: "/v1" })
   })
   .use(stationController)
   .use(scheduleController)
-  .use(syncController)
   .use(routeController)
+  .use(syncController)
+
 
 export default controllers

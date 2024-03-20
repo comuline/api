@@ -37,6 +37,7 @@ const stationController = (app: Elysia) =>
         }),
         detail: {
           description: "Sync station data",
+          tags: ["Station"]
         },
         response: syncResponse("station"),
       },
@@ -93,6 +94,7 @@ const stationController = (app: Elysia) =>
         },
         detail: {
           description: "Get a list of station data",
+          tags: ["Station"]
         },
       },
     )
@@ -144,6 +146,7 @@ const stationController = (app: Elysia) =>
         },
         detail: {
           description: "Get a station data from a station ID",
+          tags: ["Station"]
         },
       },
     )
