@@ -32,7 +32,7 @@ export const schedule = pgTable(
       stationIdx: index("station_idx").on(table.stationId),
       timeEstimatedIdx: index("time_estimated_idx").on(table.timeEstimated),
     }
-  }
+  },
 )
 
 export type Schedule = typeof schedule.$inferSelect

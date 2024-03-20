@@ -1,13 +1,13 @@
-import { Elysia, InternalServerError, t } from "elysia";
-import * as service from "../services";
-import { SyncType, syncResponse } from "../commons/types";
+import { Elysia, InternalServerError, t } from "elysia"
+import * as service from "../services"
+import { SyncType, syncResponse } from "../commons/types"
 
 const routeController = (app: Elysia) =>
   app.group("/route", (app) => {
     app.get(
       "/:trainId",
       async (ctx) => {
-        return await service.route.getAll(ctx.params.trainId);
+        return await service.route.getAll(ctx.params.trainId)
       },
       {
         params: t.Object({
@@ -27,7 +27,7 @@ const routeController = (app: Elysia) =>
                 status: 404,
                 message: "Route data is not found",
               },
-            }
+            },
           ),
           200: t.Object(
             {
@@ -44,7 +44,7 @@ const routeController = (app: Elysia) =>
                   timeEstimated: t.Nullable(t.String()),
                   destinationTime: t.Nullable(t.String()),
                   updatedAt: t.Nullable(t.String()),
-                })
+                }),
               ),
             },
             {
@@ -293,7 +293,7 @@ const routeController = (app: Elysia) =>
                   },
                 ],
               },
-            }
+            },
           ),
         },
 
@@ -301,10 +301,10 @@ const routeController = (app: Elysia) =>
           description:
             "Get a list of schedule data for a train route from a train ID sorted by timeEstimated",
         },
-      }
-    );
+      },
+    )
 
-    return app;
-  });
+    return app
+  })
 
-export default routeController;
+export default routeController

@@ -46,14 +46,14 @@ const syncController = (app: Elysia) =>
                   },
                 ],
               },
-            }
+            },
           ),
         },
 
         detail: {
           description: "Get the most updated 20 sync data",
         },
-      }
+      },
     )
 
     app.get(
@@ -77,7 +77,7 @@ const syncController = (app: Elysia) =>
                 status: 404,
                 message: "Sync data is not found",
               },
-            }
+            },
           ),
           200: t.Object(
             {
@@ -100,14 +100,14 @@ const syncController = (app: Elysia) =>
                   createdAt: "2024-03-10 12:19:24.500629+00",
                 },
               },
-            }
+            },
           ),
         },
 
         detail: {
           description: "Get a sync data item",
         },
-      }
+      },
     )
 
     return app

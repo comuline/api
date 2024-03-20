@@ -28,5 +28,5 @@ try {
 }
 
 logger.info(
-  `[MAIN] Service is running at ${app.server?.hostname}:${app.server?.port}`
+  `[MAIN] Service is running at ${app.server?.hostname}:${app.server?.port}`,
 )
