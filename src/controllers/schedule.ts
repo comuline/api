@@ -46,7 +46,7 @@ const scheduleController = (app: Elysia) =>
       "/:stationId",
       async (ctx) => {
         return await service.schedule.getAll(
-          ctx.params.stationId,
+          ctx.params.stationId.toLocaleUpperCase(),
           ctx.query.is_from_now ?? false,
         )
       },
