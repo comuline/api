@@ -27,7 +27,7 @@ export const syncResponse = (item: SyncItem) => ({
           status: "PENDING",
         },
       },
-    }
+    },
   ),
 })
 

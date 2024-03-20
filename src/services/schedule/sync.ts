@@ -11,7 +11,7 @@ import { handleError } from "../../commons/utils/error"
 export const syncItem = async (id: string) => {
   try {
     const req = await fetch(
-      `https://api-partner.krl.co.id/krlweb/v1/schedule?stationid=${id}&timefrom=00:00&timeto=24:00`
+      `https://api-partner.krl.co.id/krlweb/v1/schedule?stationid=${id}&timefrom=00:00&timeto=24:00`,
     ).then((res) => res.json())
 
     logger.info(`[SYNC][SCHEDULE][${id}] Fetched data from API`)
@@ -27,7 +27,7 @@ export const syncItem = async (id: string) => {
           time_est: z.string(),
           color: z.string(),
           dest_time: z.string(),
-        })
+        }),
       ),
     })
 
@@ -45,7 +45,7 @@ export const syncItem = async (id: string) => {
         .where(eq(dbSchema.station.id, id))
 
       logger.warn(
-        `[SYNC][SCHEDULE][${id}] Updated station schedule availability status`
+        `[SYNC][SCHEDULE][${id}] Updated station schedule availability status`,
       )
     } else if ((req as unknown as { status: number }).status === 200) {
       const parsedData = schema.parse(req)
@@ -65,7 +65,7 @@ export const syncItem = async (id: string) => {
               destinationTime: parseTime(d.dest_time).toLocaleTimeString(),
               color: d.color,
             }
-          })
+          }),
         )
         .onConflictDoUpdate({
           target: dbSchema.schedule.id,
@@ -82,8 +82,8 @@ export const syncItem = async (id: string) => {
     } else {
       logger.error(
         `[SYNC][SCHEDULE][${id}] Error fetch schedule data. Trace: ${JSON.stringify(
-          req
-        )}`
+          req,
+        )}`,
       )
       throw new Error("Failed to fetch schedule data for: " + id)
     }
@@ -131,7 +131,7 @@ export const sync = async () => {
         batch.map(async (id) => {
           await sleep(300)
           await syncItem(id)
-        })
+        }),
       )
     }
     logger.info("[SYNC][SCHEDULE] Syncing schedule data finished")

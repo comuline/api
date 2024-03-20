@@ -81,16 +81,12 @@
       "indexes": {
         "station_idx": {
           "name": "station_idx",
-          "columns": [
-            "station_id"
-          ],
+          "columns": ["station_id"],
           "isUnique": false
         },
         "time_estimated_idx": {
           "name": "time_estimated_idx",
-          "columns": [
-            "time_estimated"
-          ],
+          "columns": ["time_estimated"],
           "isUnique": false
         }
       },
@@ -100,9 +96,7 @@
         "schedule_id_unique": {
           "name": "schedule_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     },
@@ -159,9 +153,7 @@
         "station_id_unique": {
           "name": "station_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     },
@@ -245,9 +237,7 @@
         "sync_id_unique": {
           "name": "sync_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     }
