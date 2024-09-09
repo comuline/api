@@ -3,11 +3,13 @@ import { InternalServerError } from "elysia"
 import Cache from "../../commons/utils/cache"
 import { handleError } from "../../commons/utils/error"
 import { logger } from "../../commons/utils/log"
-import { db, dbSchema } from "../../db"
+import { dbSchema } from "../../db"
 import { Schedule } from "../../db/schema"
+import { getDB } from "../../types"
 
 export const getAll = async (stationId: string) => {
   try {
+    const db = getDB()
     const cache = new Cache<Schedule[]>(`schedule-${stationId}`, {
       ttl:
         60 *
@@ -39,6 +41,8 @@ export const getAll = async (stationId: string) => {
 
 export const getAllFromNow = async (stationId: string) => {
   try {
+    const db = getDB()
+
     const now = new Date()
 
     const currentSecond = now.getSeconds()

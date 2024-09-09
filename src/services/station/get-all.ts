@@ -1,13 +1,15 @@
 import { asc, eq } from "drizzle-orm"
 import { InternalServerError } from "elysia"
-import { db, dbSchema } from "../../db"
+import Cache from "../../commons/utils/cache"
 import { handleError } from "../../commons/utils/error"
 import { logger } from "../../commons/utils/log"
+import { dbSchema } from "../../db"
 import { Station } from "../../db/schema"
-import Cache from "../../commons/utils/cache"
+import { getDB } from "../../types"
 
 export const getAll = async () => {
   try {
+    const db = getDB()
     const cache = new Cache<Station[]>("station-all", {
       ttl:
         60 *

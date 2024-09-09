@@ -1,11 +1,13 @@
 import { eq } from "drizzle-orm"
 import { InternalServerError } from "elysia"
-import { db, dbSchema } from "../../db"
 import { handleError } from "../../commons/utils/error"
 import { logger } from "../../commons/utils/log"
+import { dbSchema } from "../../db"
+import { getDB } from "../../types"
 
 export const getItemById = async (syncId: string) => {
   try {
+    const db = getDB()
     const item = await db.query.sync.findFirst({
       where: eq(dbSchema.sync.id, syncId),
     })

@@ -1,16 +1,8 @@
-import { drizzle } from "drizzle-orm/postgres-js"
-import dbConnection from "../commons/libs/db"
+import { neon } from "@neondatabase/serverless"
+import { drizzle } from "drizzle-orm/neon-http"
+export * as dbSchema from "./schema"
 
-import { station, schedule, sync } from "./schema"
-
-const dbSchema = {
-  station,
-  schedule,
-  sync,
+export const createDB = (url: string) => {
+  const sql = neon(url)
+  return drizzle(sql)
 }
-
-const db = drizzle(dbConnection, {
-  schema: dbSchema,
-})
-
-export { dbSchema, db }

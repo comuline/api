@@ -1,0 +1,17 @@
+name = "comuline-api"
+compatibility_date = "2024-08-21"
+main = "src/app.ts"
+minify = true
+compatibility_flags = [ "nodejs_compat_v2" ]
+
+[limits]
+cpu_ms = 30000
+
+
+[vars]
+DATABASE_URL = ""
+REDIS_URL = ""
+SYNC_TOKEN = ""
+
+
+

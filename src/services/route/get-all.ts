@@ -1,14 +1,16 @@
 import { and, asc, eq, gte, sql } from "drizzle-orm"
 import { InternalServerError } from "elysia"
 import Cache from "../../commons/utils/cache"
+import { getSecondsRemainingFromNow } from "../../commons/utils/date"
 import { handleError } from "../../commons/utils/error"
 import { logger } from "../../commons/utils/log"
-import { db, dbSchema } from "../../db"
+import { dbSchema } from "../../db"
 import { Schedule, Station } from "../../db/schema"
-import { getSecondsRemainingFromNow } from "../../commons/utils/date"
+import { getDB } from "../../types"
 
 export const getAll = async (trainId: string) => {
   try {
+    const db = getDB()
     const cache = new Cache<(Schedule & { stationName: Station["name"] })[]>(
       `route-${trainId}`,
       {
@@ -56,6 +58,8 @@ export const getAll = async (trainId: string) => {
 
 export const getAllFrom = async (trainId: string, fromStationId?: string) => {
   try {
+    const db = getDB()
+
     const cache = new Cache<(Schedule & { stationName: Station["name"] })[]>(
       `route-${trainId}-${fromStationId}`,
       {

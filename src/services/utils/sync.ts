@@ -1,8 +1,9 @@
 import { sql } from "drizzle-orm"
-import { db, dbSchema } from "../../db"
-import { NewSync, sync } from "../../db/schema"
-import { handleError } from "../../commons/utils/error"
 import { SyncItem, SyncType } from "../../commons/types"
+import { handleError } from "../../commons/utils/error"
+import { dbSchema } from "../../db"
+import { NewSync } from "../../db/schema"
+import { getDB } from "../../types"
 
 /** A function wrapper utils to handle syncing status */
 export const syncWrapper =
@@ -18,6 +19,7 @@ export const syncWrapper =
     },
   ) =>
   async () => {
+    const db = getDB()
     const start = await db
       .insert(dbSchema.sync)
       .values({

@@ -1,15 +1,18 @@
 import { eq, sql } from "drizzle-orm"
-import { db, dbSchema } from "../../db"
-import { parseTime } from "../../commons/utils/date"
-import { logger } from "../../commons/utils/log"
-import { z } from "zod"
-import { NewStation } from "../../db/schema"
-import { sleep } from "bun"
 import { InternalServerError } from "elysia"
+import { z } from "zod"
+import { parseTime } from "../../commons/utils/date"
 import { handleError } from "../../commons/utils/error"
+import { logger } from "../../commons/utils/log"
+import { dbSchema } from "../../db"
+import { NewStation } from "../../db/schema"
+import { getDB } from "../../types"
+import { sleep } from "../utils"
 
 export const syncItem = async (id: string) => {
   try {
+    const db = getDB()
+
     const req = await fetch(
       `https://api-partner.krl.co.id/krlweb/v1/schedule?stationid=${id}&timefrom=00:00&timeto=24:00`,
     ).then((res) => res.json())
@@ -93,6 +96,7 @@ export const syncItem = async (id: string) => {
 }
 
 export const sync = async () => {
+  const db = getDB()
   const stationsQuery = await db.query.station.findMany()
 
   const initialStations = await stationsQuery.map(({ id }) => id)

@@ -1,12 +1,14 @@
-import { z } from "zod"
-import { db, dbSchema } from "../../db"
-import { logger } from "../../commons/utils/log"
 import { sql } from "drizzle-orm"
 import { InternalServerError } from "elysia"
+import { z } from "zod"
 import { handleError } from "../../commons/utils/error"
+import { logger } from "../../commons/utils/log"
+import { dbSchema } from "../../db"
+import { getDB } from "../../types"
 
 export const sync = async () => {
   try {
+    const db = getDB()
     logger.info("[SYNC][STATION] Syncing station data started")
 
     const req = await fetch(

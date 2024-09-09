@@ -4,7 +4,7 @@ import { logger } from "./commons/utils/log"
 import swagger from "./commons/libs/swagger"
 import { rateLimit } from "elysia-rate-limit"
 
-const app = new Elysia()
+export const app = new Elysia({ aot: false })
   .use(controllers)
   .get("/", (ctx) => {
     ctx.set.redirect = "/docs"
