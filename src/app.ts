@@ -9,6 +9,7 @@ export default {
     const db = createDB(env.DATABASE_URL)
     Container.set("env", env)
     Container.set("db", db)
+    Container.set("kv", env.KV)
     return await app.fetch(request)
   },
 }

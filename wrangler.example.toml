@@ -10,7 +10,8 @@ cpu_ms = 30000
 
 [vars]
 DATABASE_URL = ""
-REDIS_URL = ""
+PSTASH_REDIS_REST_TOKEN = ""
+UPSTASH_REDIS_REST_URL = ""
 SYNC_TOKEN = ""
 
 
