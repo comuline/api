@@ -28,6 +28,7 @@
     "@scalar/hono-api-reference": "^0.5.145",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
+    "drizzle-zod": "^0.5.1",
     "elysia": "latest",
     "elysia-rate-limit": "^2.1.0",
     "hono": "^4.5.11",

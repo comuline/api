@@ -12,6 +12,7 @@ import {
   time,
   uuid,
 } from "drizzle-orm/pg-core"
+import { createSelectSchema } from "drizzle-zod"
 
 export const schedule = pgTable(
   "schedule",
@@ -47,6 +48,9 @@ export const station = pgTable("station", {
 })
 
 export type Station = typeof station.$inferSelect
+
+export const stationSchema = createSelectSchema(station)
+
 export type NewStation = typeof station.$inferInsert
 
 export const syncFromEnum = pgEnum("sync_from", ["cron", "manual"])
