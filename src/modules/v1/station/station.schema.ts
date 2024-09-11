@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { stationSchema } from "../../../db/schema"
+import { StationMetadata, stationSchema } from "../../../db/schema-new"
 
 export const stationResponseSchema = z
   .object({
@@ -9,16 +9,24 @@ export const stationResponseSchema = z
     name: stationSchema.shape.name.openapi({
       example: "MANGGARAI",
     }),
-    daop: stationSchema.shape.daop.openapi({
-      example: 1,
+    type: stationSchema.shape.type.openapi({
+      type: "string",
+      example: "KRL",
     }),
-    fgEnable: stationSchema.shape.fgEnable.openapi({
-      example: 1,
+    metadata: stationSchema.shape.metadata.openapi({
+      type: "object",
+      example: {
+        fgEnable: 1,
+        haveSchedule: true,
+        daop: 1,
+      } satisfies StationMetadata,
     }),
-    haveSchedule: stationSchema.shape.haveSchedule.openapi({
-      example: true,
+    createdAt: stationSchema.shape.createdAt.openapi({
+      format: "date-time",
+      example: "2024-03-10T09:55:07.213Z",
     }),
     updatedAt: stationSchema.shape.updatedAt.openapi({
+      format: "date-time",
       example: "2024-03-10T09:55:07.213Z",
     }),
   })

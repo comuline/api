@@ -1,157 +1,85 @@
 {
-  "id": "3971c9c2-bffe-4208-bf4a-20601164fd08",
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "80e17491-98fa-42b1-b306-3962e64e21a5",
   "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
   "tables": {
-    "schedule": {
-      "name": "schedule",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "station_id": {
-          "name": "station_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "train_id": {
-          "name": "train_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "line": {
-          "name": "line",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "route": {
-          "name": "route",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "color": {
-          "name": "color",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "destination": {
-          "name": "destination",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "time_estimated": {
-          "name": "time_estimated",
-          "type": "time",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "destination_time": {
-          "name": "destination_time",
-          "type": "time",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "(CURRENT_TIMESTAMP)"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "schedule_id_unique": {
-          "name": "schedule_id_unique",
-          "nullsNotDistinct": false,
-          "columns": ["id"]
-        }
-      }
-    },
     "station": {
       "name": "station",
-      "schema": "",
       "columns": {
         "id": {
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
+          "notNull": true,
+          "autoincrement": false
         },
-        "daop": {
-          "name": "daop",
-          "type": "integer",
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "default": "NULL"
+          "autoincrement": false
         },
-        "fg_enable": {
-          "name": "fg_enable",
-          "type": "integer",
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
-        },
-        "have_schedule": {
-          "name": "have_schedule",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "true"
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "default": "(CURRENT_TIMESTAMP)"
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
+      "indexes": {
         "station_id_unique": {
           "name": "station_id_unique",
-          "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "station_idx": {
+          "name": "station_idx",
+          "columns": [
+            "id"
+          ],
+          "isUnique": false
         }
-      }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     }
   },
   "enums": {},
-  "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
   }
 }

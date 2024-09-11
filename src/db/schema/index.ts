@@ -3,7 +3,6 @@ import {
   bigint,
   bigserial,
   boolean,
-  date,
   index,
   integer,
   pgEnum,

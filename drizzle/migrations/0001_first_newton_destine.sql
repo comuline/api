@@ -1,0 +1,1 @@
+CREATE INDEX `station_type_idx` ON `station` (`type`);

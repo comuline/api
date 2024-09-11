@@ -17,6 +17,9 @@
     "db:migrate": "bun run src/db/migrate.ts",
     "db:pull": "drizzle-kit introspect:pg",
     "db:check": "drizzle-kit check:pg",
+    "migration:drop": "drizzle-kit drop",
+    "migration:generate": "drizzle-kit generate",
+    "migration:apply": "bun run src/db/migrate.ts",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
     "prepare": "husky"

@@ -1,33 +1,19 @@
 {
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1709969312190,
-      "tag": "0000_futuristic_colossus",
+      "version": "6",
+      "when": 1726033595340,
+      "tag": "0000_illegal_human_torch",
       "breakpoints": true
     },
     {
       "idx": 1,
-      "version": "5",
-      "when": 1709976152377,
-      "tag": "0001_dapper_the_professor",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1710153775566,
-      "tag": "0002_smart_vermin",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1710159697753,
-      "tag": "0003_confused_lethal_legion",
+      "version": "6",
+      "when": 1726035106303,
+      "tag": "0001_first_newton_destine",
       "breakpoints": true
     }
   ]
