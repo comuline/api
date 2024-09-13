@@ -1,18 +1,19 @@
-import { D1Database, KVNamespace } from "@cloudflare/workers-types"
+import { KVNamespace } from "@cloudflare/workers-types"
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { apiReference } from "@scalar/hono-api-reference"
-import { DrizzleD1Database } from "drizzle-orm/d1"
+import { NeonDatabase } from "drizzle-orm/neon-serverless"
 import { NewStation, station } from "./db/schema-new"
 import v1 from "./modules/v1"
 import { dbMiddleware } from "./modules/v1/station/station.route"
 
 export type Bindings = {
-  DB: D1Database
   KV: KVNamespace
+  DATABASE_URL: string
+  COMULINE_ENV: string
 }
 
 export type Variables = {
-  db: DrizzleD1Database<typeof import("./db/schema-new")>
+  db: NeonDatabase<typeof import("./db/schema-new")>
 }
 
 export type Environments = {
@@ -42,6 +43,7 @@ app.post("/echo", async (c) => {
   const db = c.get("db")
 
   const insert = {
+    uid: "st_krl_ac",
     id: "AC",
     name: "ANCOL",
     type: "KRL",

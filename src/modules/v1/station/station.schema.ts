@@ -3,6 +3,9 @@ import { StationMetadata, stationSchema } from "../../../db/schema-new"
 
 export const stationResponseSchema = z
   .object({
+    uid: stationSchema.shape.uid.openapi({
+      example: "st_krl_mri",
+    }),
     id: stationSchema.shape.id.openapi({
       example: "MRI",
     }),

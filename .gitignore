@@ -43,3 +43,4 @@ package-lock.json
 .env
 wrangler.toml
 .wrangler
+.dev.vars

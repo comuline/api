@@ -1,14 +1,28 @@
 import { createRoute, z } from "@hono/zod-openapi"
-import { drizzle } from "drizzle-orm/d1"
+import { neonConfig, Pool } from "@neondatabase/serverless"
+
+import { drizzle } from "drizzle-orm/neon-serverless"
 import { createMiddleware } from "hono/factory"
 import { Environments } from "../../../app"
 import * as schema from "../../../db/schema-new"
 import { getByIdRequestSchema, stationResponseSchema } from "./station.schema"
 
-export const connectDB = (env: D1Database) => drizzle(env, { schema })
+export const connectDB = (url: string, env: string) => {
+  if (env === "development") {
+    // Set the WebSocket proxy to work with the local instance
+    neonConfig.wsProxy = (host) => `${host}:5433/v1`
+    // Disable all authentication and encryption
+    neonConfig.useSecureWebSocket = false
+    neonConfig.pipelineTLS = false
+    neonConfig.pipelineConnect = false
+  }
+
+  const pool = new Pool({ connectionString: url, ssl: true })
+  return drizzle(pool, { schema })
+}
 
 export const dbMiddleware = createMiddleware<Environments>(async (c, next) => {
-  c.set("db", connectDB(c.env.DB))
+  c.set("db", connectDB(c.env.DATABASE_URL, c.env.COMULINE_ENV))
   await next()
 })
 

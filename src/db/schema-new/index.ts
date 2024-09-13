@@ -1,5 +1,11 @@
-import { sql } from "drizzle-orm"
-import { index, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import {
+  index,
+  jsonb,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core"
 import { createSelectSchema } from "drizzle-zod"
 import { z } from "zod"
 
@@ -12,27 +18,26 @@ const stationMetadata = z.object({
 
 export type StationMetadata = z.infer<typeof stationMetadata>
 
-export const station = sqliteTable(
+export const stationTypeEnum = pgEnum("station_type", ["KRL", "MRT", "LRT"])
+
+export const station = pgTable(
   "station",
   {
-    id: text("id").primaryKey().unique(),
+    uid: text("uid").primaryKey().unique().notNull(),
+    id: text("id").notNull(),
     name: text("name").notNull(),
-    type: text("type", {
-      /* Station type */
-      enum: ["KRL", "MRT", "LRT"],
-    }).notNull(),
-    metadata: text("metadata", {
-      mode: "json",
-    }).$type<StationMetadata>(),
-    createdAt: text("created_at")
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: text("updated_at")
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+    type: stationTypeEnum("type").notNull(),
+    metadata: jsonb("metadata").$type<StationMetadata>(),
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+    }).defaultNow(),
+    updatedAt: timestamp("updated_at", {
+      withTimezone: true,
+    }).defaultNow(),
   },
   (table) => {
     return {
+      stationUidx: index("station_uidx").on(table.uid),
       stationIdx: index("station_idx").on(table.id),
       typeIdx: index("station_type_idx").on(table.type),
     }

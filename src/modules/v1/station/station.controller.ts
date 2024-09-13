@@ -1,8 +1,8 @@
 import { OpenAPIHono, z } from "@hono/zod-openapi"
 import { eq, getTableColumns, SQL, sql } from "drizzle-orm"
-import { SQLiteTable } from "drizzle-orm/sqlite-core"
+import { PgTable } from "drizzle-orm/pg-core"
 import { Environments } from "../../../app"
-import { NewStation, station } from "../../../db/schema-new"
+import { NewStation, station, stationSchema } from "../../../db/schema-new"
 import * as route from "./station.route"
 import { stationResponseSchema } from "./station.schema"
 
@@ -81,6 +81,7 @@ controller.openapi(route.sync, async (c) => {
 
   const insertStations = filterdStation.map((s) => {
     return {
+      uid: `st_krl_${s.sta_id.toLocaleLowerCase()}`,
       id: s.sta_id,
       name: s.sta_name,
       type: "KRL",
@@ -92,18 +93,19 @@ controller.openapi(route.sync, async (c) => {
     }
   }) satisfies NewStation[]
 
-  let chunkSize = 32
-
-  for (let i = 0; i < insertStations.length; i += chunkSize) {
-    await db
-      .insert(station)
-      .values(insertStations.slice(i, i + chunkSize))
-      .onConflictDoUpdate({
-        target: station.id,
-        set: conflictUpdateAllExcept(station, ["id", "name"]),
-      })
-      .returning()
-  }
+  await db
+    .insert(station)
+    .values(insertStations)
+    .onConflictDoUpdate({
+      target: station.uid,
+      set: {
+        updatedAt: new Date(),
+        uid: sql`excluded.uid`,
+        id: sql`excluded.id`,
+        name: sql`excluded.name`,
+      },
+    })
+    .returning()
 
   return c.json(
     {
@@ -119,7 +121,7 @@ controller.openapi(route.sync, async (c) => {
 export default controller
 
 export function conflictUpdateAllExcept<
-  T extends SQLiteTable,
+  T extends PgTable,
   E extends (keyof T["$inferInsert"])[],
 >(table: T, except: E) {
   const columns = getTableColumns(table)

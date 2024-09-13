@@ -9,6 +9,7 @@
   "scripts": {
     "app": "wrangler dev src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "wrangler deploy",
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
     "db:push": "drizzle-kit push:pg",
