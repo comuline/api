@@ -36,16 +36,3 @@ export const stationResponseSchema = z
     }),
   })
   .openapi("Station") satisfies typeof stationSchema
-
-export const getByIdRequestSchema = z.object({
-  id: z
-    .string()
-    .min(2)
-    .openapi({
-      param: {
-        name: "id",
-        in: "path",
-      },
-      example: "MRI",
-    }),
-})

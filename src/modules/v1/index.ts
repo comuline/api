@@ -1,8 +1,8 @@
-import { OpenAPIHono } from "@hono/zod-openapi"
+import { createAPI } from "../api"
 import stationController from "./station/station.controller"
 
-const v1 = new OpenAPIHono()
+const api = createAPI()
 
-v1.route("/station", stationController)
+const v1 = api.route("/station", stationController)
 
 export default v1

@@ -1,19 +1,18 @@
-import { KVNamespace } from "@cloudflare/workers-types"
-import { OpenAPIHono } from "@hono/zod-openapi"
 import { apiReference } from "@scalar/hono-api-reference"
-import { NeonDatabase } from "drizzle-orm/neon-serverless"
-import { NewStation, station } from "./db/schema-new"
+import { createAPI } from "./modules/api"
 import v1 from "./modules/v1"
-import { dbMiddleware } from "./modules/v1/station/station.route"
+import { Database } from "./modules/v1/database"
+import { HTTPException } from "hono/http-exception"
+import { constructResponse } from "./modules/utils/response"
 
 export type Bindings = {
-  KV: KVNamespace
   DATABASE_URL: string
   COMULINE_ENV: string
 }
 
 export type Variables = {
-  db: NeonDatabase<typeof import("./db/schema-new")>
+  db: Database<Bindings>["db"]
+  constructResponse: typeof constructResponse
 }
 
 export type Environments = {
@@ -21,53 +20,62 @@ export type Environments = {
   Variables: Variables
 }
 
-const app = new OpenAPIHono<Environments>()
+const api = createAPI()
 
-app.use(dbMiddleware)
-
-app.route("/v1", v1)
-
-app.use(
-  "/docs",
-  apiReference({
-    cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference",
-    spec: {
-      url: "/openapi",
+const app = api
+  .doc("/openapi", (c) => ({
+    openapi: "3.0.0",
+    info: {
+      version: "1.0.0",
+      title: "Comuline API",
     },
-  }),
-)
-
-app.get("/", (c) => c.json({ status: "ok" }))
-
-app.post("/echo", async (c) => {
-  const db = c.get("db")
-
-  const insert = {
-    uid: "st_krl_ac",
-    id: "AC",
-    name: "ANCOL",
-    type: "KRL",
-    metadata: {
-      fgEnable: 1,
-      haveSchedule: true,
-      daop: 1,
-    },
-  } satisfies NewStation
-
-  const data = await db.insert(station).values(insert).returning()
-
-  return c.json({
-    status: 200,
-    data,
+    servers: [
+      {
+        url: new URL(c.req.url).origin,
+        description: c.env.COMULINE_ENV,
+      },
+    ],
+  }))
+  .use(async (c, next) => {
+    const { db } = new Database({
+      COMULINE_ENV: c.env.COMULINE_ENV,
+      DATABASE_URL: c.env.DATABASE_URL,
+    })
+    c.set("db", db)
+    c.set("constructResponse", constructResponse)
+    await next()
   })
-})
-
-app.doc("/openapi", {
-  openapi: "3.0.0",
-  info: {
-    version: "1.0.0",
-    title: "My API",
-  },
-})
+  .route("/v1", v1)
+  .use(
+    "/docs",
+    apiReference({
+      cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference",
+      spec: {
+        url: "/openapi",
+      },
+    }),
+  )
+  .get("/status", (c) => c.json({ status: "ok" }))
+  .notFound((c) => c.redirect("/docs"))
+  .onError((err, c) => {
+    if (err instanceof HTTPException) {
+      return c.json(
+        {
+          success: false,
+          message: err.message,
+          cause: err.cause,
+        },
+        err.status,
+      )
+    }
+    return c.json(
+      {
+        success: false,
+        message: err.message,
+        cause: err.cause,
+      },
+      500,
+    )
+  })
 
 export default app
