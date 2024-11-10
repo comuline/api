@@ -7,7 +7,7 @@
   },
   "version": "1.0.50",
   "scripts": {
-    "app": "wrangler dev src/app.ts",
+    "app": "wrangler dev src/app.ts --port 3001",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "wrangler deploy",
     "dev": "bun run --watch src/index.ts",
