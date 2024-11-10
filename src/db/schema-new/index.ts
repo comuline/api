@@ -9,11 +9,16 @@ import {
 import { createSelectSchema } from "drizzle-zod"
 import { z } from "zod"
 
+/** Station Metadata */
 const stationMetadata = z.object({
-  /** KRL Metadata */
-  daop: z.number().nullable(),
-  fgEnable: z.number().nullable(),
-  haveSchedule: z.boolean().nullable(),
+  /** Comuline metadata */
+  has_schedule: z.boolean().nullable(),
+  /** Original metadata */
+  original: z.object({
+    /** KRL */
+    daop: z.number().nullable(),
+    fg_enable: z.number().nullable(),
+  }),
 })
 
 export type StationMetadata = z.infer<typeof stationMetadata>
@@ -28,18 +33,18 @@ export const station = pgTable(
     name: text("name").notNull(),
     type: stationTypeEnum("type").notNull(),
     metadata: jsonb("metadata").$type<StationMetadata>(),
-    createdAt: timestamp("created_at", {
+    created_at: timestamp("created_at", {
       withTimezone: true,
     }).defaultNow(),
-    updatedAt: timestamp("updated_at", {
+    updated_at: timestamp("updated_at", {
       withTimezone: true,
     }).defaultNow(),
   },
   (table) => {
     return {
-      stationUidx: index("station_uidx").on(table.uid),
-      stationIdx: index("station_idx").on(table.id),
-      typeIdx: index("station_type_idx").on(table.type),
+      station_uidx: index("station_uidx").on(table.uid),
+      station_idx: index("station_idx").on(table.id),
+      type_idx: index("station_type_idx").on(table.type),
     }
   },
 )

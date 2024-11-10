@@ -19,16 +19,18 @@ export const stationResponseSchema = z
     metadata: stationSchema.shape.metadata.openapi({
       type: "object",
       example: {
-        fgEnable: 1,
-        haveSchedule: true,
-        daop: 1,
+        has_schedule: true,
+        original: {
+          daop: 1,
+          fg_enable: 1,
+        },
       } satisfies StationMetadata,
     }),
-    createdAt: stationSchema.shape.createdAt.openapi({
+    created_at: stationSchema.shape.created_at.openapi({
       format: "date-time",
       example: "2024-03-10T09:55:07.213Z",
     }),
-    updatedAt: stationSchema.shape.updatedAt.openapi({
+    updated_at: stationSchema.shape.updated_at.openapi({
       format: "date-time",
       example: "2024-03-10T09:55:07.213Z",
     }),
