@@ -61,18 +61,22 @@ const app = api
     if (err instanceof HTTPException) {
       return c.json(
         {
-          success: false,
-          message: err.message,
-          cause: err.cause,
+          metadata: {
+            success: false,
+            message: err.message,
+            cause: err.cause,
+          },
         },
         err.status,
       )
     }
     return c.json(
       {
-        success: false,
-        message: err.message,
-        cause: err.cause,
+        metadata: {
+          success: false,
+          message: err.message,
+          cause: err.cause,
+        },
       },
       500,
     )
