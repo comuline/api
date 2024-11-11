@@ -1,13 +1,14 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { eq, sql } from "drizzle-orm"
-import { HTTPException } from "hono/http-exception"
 import { NewStation, station, StationType } from "../../../db/schema-new"
 import { createAPI } from "../../api"
 import {
   buildDataResponseSchema,
   buildMetadataResponseSchema,
 } from "../../utils/response"
+import { Sync } from "../sync"
 import { stationResponseSchema } from "./station.schema"
+import { HTTPException } from "hono/http-exception"
 
 const api = createAPI()
 
@@ -57,6 +58,7 @@ const stationController = api
                 name: "id",
                 in: "path",
               },
+              default: "MRI",
               example: "MRI",
             }),
         }),
@@ -95,9 +97,7 @@ const stationController = api
     async (c) => {
       const { db } = c.var
 
-      const req = await fetch(
-        "https://api-partner.krl.co.id/krlweb/v1/krl-station",
-      ).then((res) => res.json())
+      // TODO: Refactor to CLI
 
       const schema = z.object({
         status: z.number(),
@@ -112,18 +112,28 @@ const stationController = api
         ),
       })
 
-      const parsed = schema.safeParse(req)
+      const sync = new Sync(
+        "https://api-partner.krl.co.id/krlweb/v1/krl-station",
+        {
+          headers: {
+            Authorization:
+              "Bearer VXcYZMFtwUAoikVByzKuaZZeTo1AtCiSjejSHNdpLxyKk_SFUzog5MOkUN1ktAhFnBFoz6SlWAJBJIS-lHYsdFLSug2YNiaNllkOUsDbYkiDtmPc9XWc",
+            Host: "api-partner.krl.co.id",
+            Origin: "https://commuterline.id",
+            Referer: "https://commuterline.id/",
+          },
+        },
+      )
 
-      if (!parsed.success) {
+      const res = await sync.request(schema)
+
+      if (res instanceof Response) {
         throw new HTTPException(417, {
-          message: parsed.error.message,
-          cause: parsed.error.cause,
+          message: "Failed to sync",
         })
       }
 
-      const filterdStation = parsed.data.data.filter(
-        (d) => !d.sta_id.includes("WIL"),
-      )
+      const filterdStation = res.data.filter((d) => !d.sta_id.includes("WIL"))
 
       const insertStations = filterdStation.map((s) => {
         return {
