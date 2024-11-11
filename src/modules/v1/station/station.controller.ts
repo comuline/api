@@ -146,7 +146,7 @@ const stationController = api
           type: "KRL",
           metadata: {
             has_schedule: true,
-            original: {
+            origin: {
               fg_enable: s.fg_enable,
               daop: s.group_wil === 0 ? 1 : s.group_wil,
             },

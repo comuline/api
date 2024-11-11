@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1726200221153,
-      "tag": "0000_faithful_tyger_tiger",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1731324915407,
-      "tag": "0001_faithful_storm",
+      "when": 1731339553074,
+      "tag": "0000_overjoyed_rockslide",
       "breakpoints": true
     }
   ]

@@ -1,5 +1,5 @@
-import { z } from "zod"
-import { StationMetadata, stationSchema } from "../../../db/schema-new"
+import { z } from "@hono/zod-openapi"
+import { type StationMetadata, stationSchema } from "../../../db/schema-new"
 
 export const stationResponseSchema = z
   .object({
@@ -20,7 +20,7 @@ export const stationResponseSchema = z
       type: "object",
       example: {
         has_schedule: true,
-        original: {
+        origin: {
           daop: 1,
           fg_enable: 1,
         },

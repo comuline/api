@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm"
 import {
   index,
   jsonb,
@@ -15,9 +16,8 @@ import { z } from "zod"
 const stationMetadata = z.object({
   /** Comuline metadata */
   has_schedule: z.boolean().nullable(),
-  /** Original metadata */
-  /** TODO: Change to origin */
-  original: z.object({
+  /** Origin metadata */
+  origin: z.object({
     /** KRL */
     daop: z.number().nullable(),
     fg_enable: z.number().nullable(),
@@ -32,7 +32,7 @@ export const stationTable = pgTable(
   "station",
   {
     uid: text("uid").primaryKey().unique().notNull(),
-    id: text("id").notNull(),
+    id: text("id").unique().notNull(),
     name: text("name").notNull(),
     type: stationTypeEnum("type").notNull(),
     metadata: jsonb("metadata").$type<StationMetadata>(),
@@ -45,7 +45,7 @@ export const stationTable = pgTable(
   },
   (table) => {
     return {
-      station_uidx: index("station_uidx").on(table.uid),
+      station_uidx: uniqueIndex("station_uidx").on(table.uid),
       station_idx: index("station_idx").on(table.id),
       type_idx: index("station_type_idx").on(table.type),
     }
@@ -65,11 +65,15 @@ export const scheduleTable = pgTable(
   "schedule",
   {
     id: text("id").primaryKey().unique().notNull(),
-    station_id: text("station_id").notNull(),
-    station_origin_id: text("station_origin_id"),
-    station_origin_name: text("station_origin_name").notNull(),
-    station_destination_id: text("station_destination_id"),
-    station_destination_name: text("station_destination_name").notNull(),
+    station_id: text("station_id")
+      .notNull()
+      .references(() => stationTable.id),
+    station_origin_id: text("station_origin_id").references(
+      () => stationTable.id,
+    ),
+    station_destination_id: text("station_destination_id").references(
+      () => stationTable.id,
+    ),
     train_id: text("train_id").notNull(),
     line: text("line").notNull(),
     route: text("route").notNull(),
@@ -91,6 +95,21 @@ export const scheduleTable = pgTable(
   },
 )
 
+export const scheduleTableRelations = relations(scheduleTable, ({ one }) => ({
+  station: one(stationTable, {
+    fields: [scheduleTable.station_id],
+    references: [stationTable.id],
+  }),
+  station_origin: one(stationTable, {
+    fields: [scheduleTable.station_origin_id],
+    references: [stationTable.id],
+  }),
+  station_destination: one(stationTable, {
+    fields: [scheduleTable.station_destination_id],
+    references: [stationTable.id],
+  }),
+}))
+
 export const stationSchema = createSelectSchema(stationTable)
 
 export type NewStation = typeof stationTable.$inferInsert
@@ -104,3 +123,5 @@ export const scheduleSchema = createSelectSchema(scheduleTable, {
 })
 
 export type ScheduleType = z.infer<typeof scheduleSchema>
+
+export type NewSchedule = typeof scheduleTable.$inferInsert

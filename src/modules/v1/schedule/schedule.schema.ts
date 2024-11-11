@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@hono/zod-openapi"
 import {
   scheduleSchema,
   StationScheduleMetadata,
@@ -19,21 +19,12 @@ export const scheduleResponseSchema = z
       example: "JAKK",
       description: "Station ID where the train originates",
     }),
-    station_origin_name: scheduleSchema.shape.station_origin_name.openapi({
-      example: "JAKARTAKOTA",
-      description: "Station name where the train originates",
-    }),
     station_destination_id: scheduleSchema.shape.station_destination_id.openapi(
       {
         example: "TPK",
         description: "Station ID where the train terminates",
       },
     ),
-    station_destination_name:
-      scheduleSchema.shape.station_destination_name.openapi({
-        example: "TANJUNGPRIUK",
-        description: "Station name where the train terminates",
-      }),
     train_id: scheduleSchema.shape.train_id.openapi({
       example: "2400",
       description: "Train ID",

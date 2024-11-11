@@ -1,7 +1,12 @@
 import { sleep } from "bun"
 import { eq, sql } from "drizzle-orm"
 import { z } from "zod"
-import { NewStation, schedule, station } from "./db/schema-new"
+import {
+  NewSchedule,
+  NewStation,
+  scheduleTable,
+  stationTable,
+} from "./db/schema-new"
 import { Database } from "./modules/v1/database"
 
 export function parseTime(timeString: string): Date {
@@ -23,8 +28,12 @@ const sync = async () => {
   })
 
   const stations = await db
-    .select({ id: station.id, metadata: station.metadata, name: station.name })
-    .from(station)
+    .select({
+      id: stationTable.id,
+      metadata: stationTable.metadata,
+      name: stationTable.name,
+    })
+    .from(stationTable)
 
   const batchSizes = 5
   const totalBatches = Math.ceil(stations.length / batchSizes)
@@ -109,15 +118,13 @@ const sync = async () => {
                   station_origin_id: stations.find(
                     ({ name }) => name === origin,
                   )?.id!,
-                  station_origin_name: origin,
                   station_destination_id: stations.find(
                     ({ name }) => name === destination,
                   )?.id!,
-                  station_destination_name: d.dest,
                   train_id: d.train_id,
                   line: d.ka_name,
                   route: d.route_name,
-                  time_departure: parseTime(d.dest_time).toLocaleTimeString(),
+                  time_departure: parseTime(d.time_est).toLocaleTimeString(),
                   time_at_destination: parseTime(
                     d.dest_time,
                   ).toLocaleTimeString(),
@@ -126,14 +133,14 @@ const sync = async () => {
                       color: d.color,
                     },
                   },
-                }
+                } satisfies NewSchedule
               })
 
               const insert = await db
-                .insert(schedule)
+                .insert(scheduleTable)
                 .values(values)
                 .onConflictDoUpdate({
-                  target: schedule.id,
+                  target: scheduleTable.id,
                   set: {
                     time_departure: sql`excluded.time_departure`,
                     time_at_destination: sql`excluded.time_at_destination`,
@@ -165,7 +172,10 @@ const sync = async () => {
               : null,
             updated_at: new Date(),
           }
-          await db.update(station).set(payload).where(eq(station.id, id))
+          await db
+            .update(stationTable)
+            .set(payload)
+            .where(eq(scheduleTable.id, id))
           console.info(
             `[SYNC][SCHEDULE][${id}] Updated station schedule availability status`,
           )
