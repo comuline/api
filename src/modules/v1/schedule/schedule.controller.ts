@@ -1,6 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { asc, eq } from "drizzle-orm"
-import { schedule } from "../../../db/schema-new"
+import { scheduleTable } from "../../../db/schema-new"
 import { createAPI } from "../../api"
 import {
   buildDataResponseSchema,
@@ -40,9 +40,9 @@ const scheduleController = api.openapi(
     const db = c.get("db")
     const data = await db
       .select()
-      .from(schedule)
-      .where(eq(schedule.station_id, param.station_id.toLocaleUpperCase()))
-      .orderBy(asc(schedule.time_departure))
+      .from(scheduleTable)
+      .where(eq(scheduleTable.station_id, param.station_id.toLocaleUpperCase()))
+      .orderBy(asc(scheduleTable.time_departure))
 
     return c.json(
       {

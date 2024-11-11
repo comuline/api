@@ -28,7 +28,7 @@ export type StationMetadata = z.infer<typeof stationMetadata>
 
 export const stationTypeEnum = pgEnum("station_type", ["KRL", "MRT", "LRT"])
 
-export const station = pgTable(
+export const stationTable = pgTable(
   "station",
   {
     uid: text("uid").primaryKey().unique().notNull(),
@@ -52,7 +52,7 @@ export const station = pgTable(
   },
 )
 
-const stationScheduleMetadata = z.object({
+export const stationScheduleMetadata = z.object({
   /** Origin metadata */
   origin: z.object({
     color: z.string().nullable(),
@@ -61,7 +61,7 @@ const stationScheduleMetadata = z.object({
 
 export type StationScheduleMetadata = z.infer<typeof stationScheduleMetadata>
 
-export const schedule = pgTable(
+export const scheduleTable = pgTable(
   "schedule",
   {
     id: text("id").primaryKey().unique().notNull(),
@@ -91,18 +91,16 @@ export const schedule = pgTable(
   },
 )
 
-export const stationSchema = createSelectSchema(station)
+export const stationSchema = createSelectSchema(stationTable)
 
-export type NewStation = typeof station.$inferInsert
+export type NewStation = typeof stationTable.$inferInsert
 
 export type Station = z.infer<typeof stationSchema>
 
 export type StationType = Station["type"]
 
-export const scheduleSchema = createSelectSchema(schedule, {
+export const scheduleSchema = createSelectSchema(scheduleTable, {
   metadata: stationScheduleMetadata.nullable(),
 })
 
 export type ScheduleType = z.infer<typeof scheduleSchema>
-
-type Json = ScheduleType["metadata"]

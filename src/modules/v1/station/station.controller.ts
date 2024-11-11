@@ -1,6 +1,7 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { eq, sql } from "drizzle-orm"
-import { NewStation, station, StationType } from "../../../db/schema-new"
+import { HTTPException } from "hono/http-exception"
+import { NewStation, stationTable, StationType } from "../../../db/schema-new"
 import { createAPI } from "../../api"
 import {
   buildDataResponseSchema,
@@ -8,7 +9,6 @@ import {
 } from "../../utils/response"
 import { Sync } from "../sync"
 import { stationResponseSchema } from "./station.schema"
-import { HTTPException } from "hono/http-exception"
 
 const api = createAPI()
 
@@ -28,7 +28,7 @@ const stationController = api
     }),
     async (c) => {
       const { db } = c.var
-      const stations = await db.select().from(station)
+      const stations = await db.select().from(stationTable)
 
       return c.json(
         {
@@ -72,7 +72,10 @@ const stationController = api
     async (c) => {
       const { id } = c.req.valid("param")
       const db = c.get("db")
-      const data = await db.select().from(station).where(eq(station.id, id))
+      const data = await db
+        .select()
+        .from(stationTable)
+        .where(eq(stationTable.id, id))
 
       return c.json(
         {
@@ -152,10 +155,10 @@ const stationController = api
       }) satisfies NewStation[]
 
       await db
-        .insert(station)
+        .insert(stationTable)
         .values(insertStations)
         .onConflictDoUpdate({
-          target: station.uid,
+          target: stationTable.uid,
           set: {
             updated_at: new Date(),
             uid: sql`excluded.uid`,
