@@ -2,10 +2,7 @@ import { createRoute, z } from "@hono/zod-openapi"
 import { asc, eq } from "drizzle-orm"
 import { scheduleTable } from "../../../db/schema-new"
 import { createAPI } from "../../api"
-import {
-  buildDataResponseSchema,
-  buildMetadataResponseSchema,
-} from "../../utils/response"
+import { buildResponseSchemas } from "../../utils/response"
 import { scheduleResponseSchema } from "./schedule.schema"
 
 const api = createAPI()
@@ -29,10 +26,17 @@ const scheduleController = api.openapi(
           }),
       }),
     },
-    responses: {
-      ...buildDataResponseSchema(200, z.array(scheduleResponseSchema)),
-      ...buildMetadataResponseSchema(404, "Not found"),
-    },
+    responses: buildResponseSchemas([
+      {
+        status: 200,
+        type: "data",
+        schema: z.array(scheduleResponseSchema),
+      },
+      {
+        status: 404,
+        type: "metadata",
+      },
+    ]),
     tags: ["Schedule"],
   }),
   async (c) => {

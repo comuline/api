@@ -1,4 +1,5 @@
 import { HTTPException } from "hono/http-exception"
+import { StatusCode } from "hono/utils/http-status"
 import { z } from "zod"
 
 export const constructResponse = <T extends z.ZodType>(
@@ -18,44 +19,70 @@ export const constructResponse = <T extends z.ZodType>(
   return result.data
 }
 
-export const buildDataResponseSchema = (
-  status: number,
-  schema: z.ZodTypeAny,
-) => ({
-  [status]: {
-    content: {
-      "application/json": {
-        schema: z.object({
-          metadata: z.object({
-            success: z.boolean().default(true),
-          }),
-          data: schema,
-        }),
-      },
-    },
-    description: "Success",
-  },
-})
+interface BaseResponseSchema {
+  status: number
+}
 
-export const buildMetadataResponseSchema = (
-  status: number,
-  description?: string,
-  success?: boolean,
-) => ({
-  [status]: {
-    content: {
-      "application/json": {
-        schema: z.object({
-          metadata: z.object({
-            success: z.boolean().default(success ?? false),
-            message: z
-              .string()
-              .min(1)
-              .default(description || "Error"),
-          }),
-        }),
-      },
-    },
-    description: description || "Error",
-  },
-})
+interface DataResponseSchema extends BaseResponseSchema {
+  type: "data"
+  schema: z.ZodTypeAny
+}
+
+interface MetadataResponseSchema extends BaseResponseSchema {
+  type: "metadata"
+  description?: string
+}
+
+export const buildResponseSchemas = (
+  responses: Array<DataResponseSchema | MetadataResponseSchema>,
+) => {
+  const result: Record<number, any> = {}
+
+  for (const { status, ...rest } of responses) {
+    if (rest.type === "data") {
+      const { schema } = rest
+      result[status] = {
+        content: {
+          "application/json": {
+            schema: z.object({
+              metadata: z.object({
+                success: z.boolean().default(true),
+              }),
+              data: schema,
+            }),
+          },
+        },
+        description: "Success",
+      }
+    } else {
+      const { description } = rest
+
+      const defaultDescription = getDefaultDescription(status as StatusCode)
+
+      result[status] = {
+        content: {
+          "application/json": {
+            schema: z.object({
+              metadata: z.object({
+                success: z.boolean().default(false),
+                message: z.string().min(1).default(defaultDescription),
+              }),
+            }),
+          },
+        },
+        description: defaultDescription,
+      }
+    }
+  }
+
+  return result
+}
+
+const getDefaultDescription = (status: StatusCode) => {
+  switch (status) {
+    case 404:
+      return "Not found"
+    default:
+      return "Internal server error"
+  }
+}

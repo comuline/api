@@ -3,10 +3,7 @@ import { eq, sql } from "drizzle-orm"
 import { HTTPException } from "hono/http-exception"
 import { NewStation, stationTable, StationType } from "../../../db/schema-new"
 import { createAPI } from "../../api"
-import {
-  buildDataResponseSchema,
-  buildMetadataResponseSchema,
-} from "../../utils/response"
+import { buildResponseSchemas } from "../../utils/response"
 import { Sync } from "../sync"
 import { stationResponseSchema } from "./station.schema"
 
@@ -20,11 +17,15 @@ const stationController = api
     createRoute({
       method: "get",
       path: "/",
-      responses: {
-        ...buildDataResponseSchema(200, z.array(stationResponseSchema)),
-      },
+      responses: buildResponseSchemas([
+        {
+          status: 200,
+          type: "data",
+          schema: z.array(stationResponseSchema),
+        },
+      ]),
       tags: ["Station"],
-      description: "Get all KRL station data",
+      description: "Get all station data",
     }),
     async (c) => {
       const { db } = c.var
@@ -63,10 +64,18 @@ const stationController = api
             }),
         }),
       },
-      responses: {
-        ...buildDataResponseSchema(200, stationResponseSchema),
-        ...buildMetadataResponseSchema(404, "Not found"),
-      },
+      responses: buildResponseSchemas([
+        {
+          status: 200,
+          type: "data",
+          schema: stationResponseSchema,
+        },
+        {
+          status: 404,
+          type: "metadata",
+        },
+      ]),
+
       tags: ["Station"],
     }),
     async (c) => {
@@ -92,9 +101,14 @@ const stationController = api
     createRoute({
       method: "post",
       path: "/",
-      responses: {
-        ...buildMetadataResponseSchema(201, "Success", true),
-      },
+      responses: buildResponseSchemas([
+        {
+          status: 201,
+          type: "metadata",
+          description: "Success",
+        },
+      ]),
+
       tags: ["Station"],
     }),
     async (c) => {
