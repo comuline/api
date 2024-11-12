@@ -34,4 +34,4 @@ export const routeResponseSchema = z
   })
   .openapi("Route")
 
-export type RouteResponse = z.infer<typeof routeResponseSchema>
+export type Route = z.infer<typeof routeResponseSchema>

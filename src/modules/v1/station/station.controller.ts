@@ -1,10 +1,17 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { eq, sql } from "drizzle-orm"
 import { HTTPException } from "hono/http-exception"
-import { NewStation, stationTable, StationType } from "../../../db/schema-new"
+import {
+  NewStation,
+  Station,
+  stationTable,
+  StationType,
+} from "../../../db/schema-new"
 import { createAPI } from "../../api"
 import { buildResponseSchemas } from "../../utils/response"
+import { Cache } from "../cache"
 import { Sync } from "../sync"
+import { getSecsToMidnight } from "../uitls"
 import { stationResponseSchema } from "./station.schema"
 
 const api = createAPI()
@@ -29,7 +36,28 @@ const stationController = api
     }),
     async (c) => {
       const { db } = c.var
+
+      const cache = new Cache<Array<Station>>(c.env, "stations")
+
+      const cached = await cache.get()
+
+      if (cached)
+        return c.json(
+          {
+            metadata: {
+              success: true,
+            },
+            data: c.var.constructResponse(
+              z.array(stationResponseSchema),
+              cached,
+            ),
+          },
+          200,
+        )
+
       const stations = await db.select().from(stationTable)
+
+      await cache.set(stations, getSecsToMidnight())
 
       return c.json(
         {
@@ -79,12 +107,31 @@ const stationController = api
       description: "Get station by id",
     }),
     async (c) => {
-      const { id } = c.req.valid("param")
-      const db = c.get("db")
+      const param = c.req.valid("param")
+
+      const { db } = c.var
+
+      const cache = new Cache<Station>(c.env, `station:${param.id}`)
+
+      const cached = await cache.get()
+
+      if (cached)
+        return c.json(
+          {
+            metadata: {
+              success: true,
+            },
+            data: c.var.constructResponse(stationResponseSchema, cached),
+          },
+          200,
+        )
+
       const data = await db
         .select()
         .from(stationTable)
-        .where(eq(stationTable.id, id))
+        .where(eq(stationTable.id, param.id))
+
+      await cache.set(data[0], getSecsToMidnight())
 
       return c.json(
         {

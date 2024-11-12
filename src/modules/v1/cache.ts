@@ -5,11 +5,11 @@ export class Cache<T> {
   public key: string
 
   constructor(
-    key: string,
     protected env: {
       UPSTASH_REDIS_REST_TOKEN: string
       UPSTASH_REDIS_REST_URL: string
     },
+    key: string,
   ) {
     this.key = key
     this.kv = Redis.fromEnv(env)

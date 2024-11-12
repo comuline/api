@@ -3,7 +3,9 @@ import { eq } from "drizzle-orm"
 import { scheduleTable } from "../../../db/schema-new"
 import { createAPI } from "../../api"
 import { buildResponseSchemas } from "../../utils/response"
-import { RouteResponse, routeResponseSchema } from "./route.schema"
+import { Cache } from "../cache"
+import { Route, routeResponseSchema } from "./route.schema"
+import { getSecsToMidnight } from "../uitls"
 
 const api = createAPI()
 
@@ -39,6 +41,21 @@ const routeController = api.openapi(
   async (c) => {
     const param = c.req.valid("param")
     const { db } = c.var
+
+    const cache = new Cache<Route>(c.env, `route:${param.train_id}`)
+
+    const cached = await cache.get()
+
+    if (cached)
+      return c.json(
+        {
+          metadata: {
+            success: true,
+          },
+          data: c.var.constructResponse(routeResponseSchema, cached),
+        },
+        200,
+      )
 
     const data = await db.query.scheduleTable.findMany({
       with: {
@@ -96,7 +113,9 @@ const routeController = api.openapi(
         station_destination_name: data[0].station_destination?.name ?? "",
         time_at_destination: data[0].time_at_destination,
       },
-    } satisfies RouteResponse
+    } satisfies Route
+
+    await cache.set(response, getSecsToMidnight())
 
     return c.json(
       {

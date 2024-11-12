@@ -1,9 +1,11 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { asc, eq } from "drizzle-orm"
-import { scheduleTable } from "../../../db/schema-new"
+import { scheduleTable, Schedule } from "../../../db/schema-new"
 import { createAPI } from "../../api"
 import { buildResponseSchemas } from "../../utils/response"
 import { scheduleResponseSchema } from "./schedule.schema"
+import { Cache } from "../cache"
+import { getSecsToMidnight } from "../uitls"
 
 const api = createAPI()
 
@@ -38,12 +40,36 @@ const scheduleController = api.openapi(
   }),
   async (c) => {
     const param = c.req.valid("param")
-    const db = c.get("db")
+    const { db } = c.var
+
+    const cache = new Cache<Array<Schedule>>(
+      c.env,
+      `schedules:${param.station_id}`,
+    )
+
+    const cached = await cache.get()
+
+    if (cached)
+      return c.json(
+        {
+          metadata: {
+            success: true,
+          },
+          data: c.var.constructResponse(
+            z.array(scheduleResponseSchema),
+            cached,
+          ),
+        },
+        200,
+      )
+
     const data = await db
       .select()
       .from(scheduleTable)
       .where(eq(scheduleTable.station_id, param.station_id.toLocaleUpperCase()))
       .orderBy(asc(scheduleTable.time_departure))
+
+    await cache.set(data, getSecsToMidnight())
 
     return c.json(
       {

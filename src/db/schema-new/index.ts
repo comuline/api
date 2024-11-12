@@ -139,6 +139,6 @@ export const scheduleSchema = createSelectSchema(scheduleTable, {
   metadata: stationScheduleMetadata.nullable(),
 })
 
-export type ScheduleType = z.infer<typeof scheduleSchema>
+export type Schedule = z.infer<typeof scheduleSchema>
 
 export type NewSchedule = typeof scheduleTable.$inferInsert
