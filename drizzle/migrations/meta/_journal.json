@@ -15,6 +15,13 @@
       "when": 1731396377710,
       "tag": "0001_tiny_shadowcat",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731399355344,
+      "tag": "0002_serious_the_hand",
+      "breakpoints": true
     }
   ]
 }

@@ -74,12 +74,20 @@ export const scheduleTable = pgTable(
     id: text("id").primaryKey().unique().notNull(),
     station_id: text("station_id")
       .notNull()
-      .references(() => stationTable.id),
+      .references(() => stationTable.id, {
+        onDelete: "cascade",
+      }),
     station_origin_id: text("station_origin_id").references(
       () => stationTable.id,
+      {
+        onDelete: "set null",
+      },
     ),
     station_destination_id: text("station_destination_id").references(
       () => stationTable.id,
+      {
+        onDelete: "set null",
+      },
     ),
     train_id: text("train_id").notNull(),
     line: text("line").notNull(),
