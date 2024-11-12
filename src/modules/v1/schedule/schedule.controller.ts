@@ -32,10 +32,6 @@ const scheduleController = api.openapi(
         type: "data",
         schema: z.array(scheduleResponseSchema),
       },
-      {
-        status: 404,
-        type: "metadata",
-      },
     ]),
     tags: ["Schedule"],
     description: "Get all active schedule by station id",

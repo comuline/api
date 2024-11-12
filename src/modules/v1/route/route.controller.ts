@@ -32,10 +32,6 @@ const routeController = api.openapi(
         type: "data",
         schema: routeResponseSchema,
       },
-      {
-        status: 404,
-        type: "metadata",
-      },
     ]),
     tags: ["Route"],
     description: "Get route by train id",
