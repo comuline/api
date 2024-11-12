@@ -1,5 +1,6 @@
+import { type RouteConfig } from "@hono/zod-openapi"
 import { HTTPException } from "hono/http-exception"
-import { StatusCode } from "hono/utils/http-status"
+import { type StatusCode } from "hono/utils/http-status"
 import { z } from "zod"
 
 export const constructResponse = <T extends z.ZodType>(
@@ -35,8 +36,8 @@ interface MetadataResponseSchema extends BaseResponseSchema {
 
 export const buildResponseSchemas = (
   responses: Array<DataResponseSchema | MetadataResponseSchema>,
-) => {
-  const result: Record<number, any> = {}
+): RouteConfig["responses"] => {
+  let result: RouteConfig["responses"] = {}
 
   for (const { status, ...rest } of responses) {
     if (rest.type === "data") {
@@ -53,11 +54,12 @@ export const buildResponseSchemas = (
           },
         },
         description: "Success",
-      }
+      } satisfies RouteConfig["responses"][string]
     } else {
       const { description } = rest
 
-      const defaultDescription = getDefaultDescription(status as StatusCode)
+      const defaultDescription =
+        description ?? getDefaultDescription(status as StatusCode)
 
       result[status] = {
         content: {
@@ -71,7 +73,7 @@ export const buildResponseSchemas = (
           },
         },
         description: defaultDescription,
-      }
+      } satisfies RouteConfig["responses"][string]
     }
   }
 
