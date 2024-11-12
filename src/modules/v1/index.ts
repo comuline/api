@@ -1,5 +1,5 @@
 import { createAPI } from "../api"
-import routeController from "./route"
+import routeController from "./route/route.controller"
 import scheduleController from "./schedule/schedule.controller"
 import stationController from "./station/station.controller"
 
