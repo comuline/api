@@ -17,7 +17,9 @@
     "migration:apply": "bun run src/db/migrate.ts",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "sync:schedule": "bun run --env-file .dev.vars src/sync/schedule.ts",
+    "sync:station": "bun run --env-file .dev.vars src/sync/station.ts"
   },
   "dependencies": {
     "@hono/zod-openapi": "^0.16.0",

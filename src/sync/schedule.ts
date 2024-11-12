@@ -6,24 +6,17 @@ import {
   NewStation,
   scheduleTable,
   stationTable,
-} from "./db/schema"
-import { Database } from "./modules/v1/database"
-
-export function parseTime(timeString: string): Date {
-  const [hours, minutes, seconds] = timeString.split(":").map(Number)
-  const date = new Date()
-  date.setHours(hours ?? date.getHours())
-  date.setMinutes(minutes ?? date.getMinutes())
-  date.setSeconds(seconds ?? date.getSeconds())
-
-  return date
-}
+} from "../db/schema"
+import { Database } from "../modules/v1/database"
+import { parseTime } from "../utils/time"
+import { KAI_HEADERS } from "./headers"
 
 const sync = async () => {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL env is missing")
+  if (!process.env.COMULINE_ENV) throw new Error("COMULINE_ENV env is missing")
 
   const { db } = new Database({
-    COMULINE_ENV: "development",
+    COMULINE_ENV: process.env.COMULINE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
   })
 
@@ -64,21 +57,11 @@ const sync = async () => {
 
         const url = `https://api-partner.krl.co.id/krlweb/v1/schedule?stationid=${id}&timefrom=00:00&timeto=23:00`
 
-        const headers = {
-          "User-Agent":
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:132.0) Gecko/20100101 Firefox/132.0",
-          Accept: "application/json, text/javascript, */*; q=0.01",
-          "Accept-Language": "en-US,en;q=0.5",
-          Authorization:
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMDYzNWIyOGMzYzg3YTY3ZTRjYWE4YTI0MjYxZGYwYzIxNjYzODA4NWM2NWU4ZjhiYzQ4OGNlM2JiZThmYWNmODU4YzY0YmI0MjgyM2EwOTUiLCJpYXQiOjE3MjI2MTc1MTQsIm5iZiI6MTcyMjYxNzUxNCwiZXhwIjoxNzU0MTUzNTE0LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.Jz_sedcMtaZJ4dj0eWVc4_pr_wUQ3s1-UgpopFGhEmJt_iGzj6BdnOEEhcDDdIz-gydQL5ek0S_36v5h6P_X3OQyII3JmHp1SEDJMwrcy4FCY63-jGnhPBb4sprqUFruDRFSEIs1cNQ-3rv3qRDzJtGYc_bAkl2MfgZj85bvt2DDwBWPraZuCCkwz2fJvox-6qz6P7iK9YdQq8AjJfuNdl7t_1hMHixmtDG0KooVnfBV7PoChxvcWvs8FOmtYRdqD7RSEIoOXym2kcwqK-rmbWf9VuPQCN5gjLPimL4t2TbifBg5RWNIAAuHLcYzea48i3okbhkqGGlYTk3iVMU6Hf_Jruns1WJr3A961bd4rny62lNXyGPgNLRJJKedCs5lmtUTr4gZRec4Pz_MqDzlEYC3QzRAOZv0Ergp8-W1Vrv5gYyYNr-YQNdZ01mc7JH72N2dpU9G00K5kYxlcXDNVh8520-R-MrxYbmiFGVlNF2BzEH8qq6Ko9m0jT0NiKEOjetwegrbNdNq_oN4KmHvw2sHkGWY06rUeciYJMhBF1JZuRjj3JTwBUBVXcYZMFtwUAoikVByzKuaZZeTo1AtCiSjejSHNdpLxyKk_SFUzog5MOkUN1ktAhFnBFoz6SlWAJBJIS-lHYsdFLSug2YNiaNllkOUsDbYkiDtmPc9XWc",
-          Priority: "u=0",
-        }
-
         console.info(`[SYNC][SCHEDULE][${id}] Send preflight`)
         const optionsResponse = await fetch(url, {
           method: "OPTIONS",
           headers: {
-            ...headers,
+            ...KAI_HEADERS,
             "Access-Control-Request-Method": "GET",
             "Access-Control-Request-Headers": "authorization,content-type",
           },
@@ -93,7 +76,7 @@ const sync = async () => {
         }
         const req = await fetch(url, {
           method: "GET",
-          headers,
+          headers: KAI_HEADERS,
           credentials: "include",
           mode: "cors",
         })
