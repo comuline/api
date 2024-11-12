@@ -1,5 +1,5 @@
 import { z } from "@hono/zod-openapi"
-import { type StationMetadata, stationSchema } from "../../../db/schema-new"
+import { type StationMetadata, stationSchema } from "../../../db/schema"
 
 export const stationResponseSchema = z
   .object({

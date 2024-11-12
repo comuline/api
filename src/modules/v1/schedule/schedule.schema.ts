@@ -3,7 +3,7 @@ import {
   scheduleSchema,
   StationScheduleMetadata,
   stationSchema,
-} from "../../../db/schema-new"
+} from "../../../db/schema"
 
 export const scheduleResponseSchema = z
   .object({

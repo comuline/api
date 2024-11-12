@@ -6,7 +6,7 @@ import {
   NewStation,
   scheduleTable,
   stationTable,
-} from "./db/schema-new"
+} from "./db/schema"
 import { Database } from "./modules/v1/database"
 
 export function parseTime(timeString: string): Date {

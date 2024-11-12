@@ -6,7 +6,7 @@ import {
   Station,
   stationTable,
   StationType,
-} from "../../../db/schema-new"
+} from "../../../db/schema"
 import { createAPI } from "../../api"
 import { buildResponseSchemas } from "../../utils/response"
 import { Cache } from "../cache"

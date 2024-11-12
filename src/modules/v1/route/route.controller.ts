@@ -1,6 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { eq } from "drizzle-orm"
-import { scheduleTable } from "../../../db/schema-new"
+import { scheduleTable } from "../../../db/schema"
 import { createAPI } from "../../api"
 import { buildResponseSchemas } from "../../utils/response"
 import { Cache } from "../cache"
