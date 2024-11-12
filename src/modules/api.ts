@@ -1,4 +1,4 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
-import { Environments } from "../app"
+import { Environments } from ".."
 
 export const createAPI = <T extends Environments>() => new OpenAPIHono<T>()
