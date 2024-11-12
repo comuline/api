@@ -1,6 +1,6 @@
 name = "comuline-api"
 compatibility_date = "2024-08-21"
-main = "src/app.ts"
+main = "src/index.ts"
 minify = true
 
 [limits]
