@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi"
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { Station, stationTable } from "../../../db/schema"
 import { buildResponseSchemas } from "../../../utils/response"
 import { getSecsToMidnight } from "../../../utils/time"
@@ -45,7 +45,9 @@ const stationController = api
           200,
         )
 
-      const stations = await db.select().from(stationTable)
+      const query = db.select().from(stationTable).prepare("query_all_stations")
+
+      const stations = await query.execute()
 
       await cache.set(stations, getSecsToMidnight())
 
@@ -116,10 +118,13 @@ const stationController = api
           200,
         )
 
-      const data = await db
+      const query = db
         .select()
         .from(stationTable)
-        .where(eq(stationTable.id, param.id))
+        .where(eq(stationTable.id, sql.placeholder("id")))
+        .prepare("query_station_by_id")
+
+      const data = await query.execute({ id: param.id })
 
       await cache.set(data[0], getSecsToMidnight())
 

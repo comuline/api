@@ -1,6 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi"
-import { eq } from "drizzle-orm"
-import { scheduleTable } from "../../../db/schema"
+import { asc, eq, sql } from "drizzle-orm"
+import { scheduleTable, stationTable } from "../../../db/schema"
 import { createAPI } from "../../api"
 import { buildResponseSchemas } from "../../../utils/response"
 import { Cache } from "../cache"
@@ -57,21 +57,29 @@ const routeController = api.openapi(
         200,
       )
 
-    const data = await db.query.scheduleTable.findMany({
-      with: {
-        station: {
-          columns: {
-            name: true,
+    const query = db.query.scheduleTable
+      .findMany({
+        with: {
+          station: {
+            columns: {
+              name: true,
+            },
+          },
+          station_destination: {
+            columns: {
+              name: true,
+            },
           },
         },
-        station_destination: {
-          columns: {
-            name: true,
-          },
-        },
-      },
-      orderBy: (scheduleTable, { asc }) => [asc(scheduleTable.time_departure)],
-      where: eq(scheduleTable.train_id, param.train_id),
+        orderBy: (scheduleTable, { asc }) => [
+          asc(scheduleTable.time_departure),
+        ],
+        where: eq(scheduleTable.train_id, sql.placeholder("train_id")),
+      })
+      .prepare("query_route_by_train_id")
+
+    const data = await query.execute({
+      train_id: param.train_id,
     })
 
     if (data.length === 0)

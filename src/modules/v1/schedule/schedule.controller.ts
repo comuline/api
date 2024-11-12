@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi"
-import { asc, eq } from "drizzle-orm"
+import { asc, eq, sql } from "drizzle-orm"
 import { scheduleTable, Schedule } from "../../../db/schema"
 import { createAPI } from "../../api"
 import { buildResponseSchemas } from "../../../utils/response"
@@ -63,11 +63,16 @@ const scheduleController = api.openapi(
         200,
       )
 
-    const data = await db
+    const query = db
       .select()
       .from(scheduleTable)
-      .where(eq(scheduleTable.station_id, param.station_id.toLocaleUpperCase()))
+      .where(eq(scheduleTable.station_id, sql.placeholder("station_id")))
       .orderBy(asc(scheduleTable.time_departure))
+      .prepare("query_schedule_by_station_id")
+
+    const data = await query.execute({
+      station_id: param.station_id.toLocaleUpperCase(),
+    })
 
     await cache.set(data, getSecsToMidnight())
 
