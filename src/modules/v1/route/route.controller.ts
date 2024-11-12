@@ -2,10 +2,10 @@ import { createRoute, z } from "@hono/zod-openapi"
 import { eq } from "drizzle-orm"
 import { scheduleTable } from "../../../db/schema"
 import { createAPI } from "../../api"
-import { buildResponseSchemas } from "../../utils/response"
+import { buildResponseSchemas } from "../../../utils/response"
 import { Cache } from "../cache"
 import { Route, routeResponseSchema } from "./route.schema"
-import { getSecsToMidnight } from "../uitls"
+import { getSecsToMidnight } from "../../../utils/time"
 
 const api = createAPI()
 

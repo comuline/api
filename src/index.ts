@@ -3,7 +3,7 @@ import { createAPI } from "./modules/api"
 import v1 from "./modules/v1"
 import { Database } from "./modules/v1/database"
 import { HTTPException } from "hono/http-exception"
-import { constructResponse } from "./modules/utils/response"
+import { constructResponse } from "./utils/response"
 
 export type Bindings = {
   DATABASE_URL: string

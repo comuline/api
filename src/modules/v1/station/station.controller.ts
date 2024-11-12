@@ -8,10 +8,10 @@ import {
   StationType,
 } from "../../../db/schema"
 import { createAPI } from "../../api"
-import { buildResponseSchemas } from "../../utils/response"
+import { buildResponseSchemas } from "../../../utils/response"
 import { Cache } from "../cache"
 import { Sync } from "../sync"
-import { getSecsToMidnight } from "../uitls"
+import { getSecsToMidnight } from "../../../utils/time"
 import { stationResponseSchema } from "./station.schema"
 
 const api = createAPI()
