@@ -221,7 +221,7 @@ const stationController = api
         .onConflictDoUpdate({
           target: stationTable.uid,
           set: {
-            updated_at: new Date(),
+            updated_at: new Date().toLocaleString(),
             uid: sql`excluded.uid`,
             id: sql`excluded.id`,
             name: sql`excluded.name`,
