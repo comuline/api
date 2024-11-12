@@ -38,6 +38,7 @@ const scheduleController = api.openapi(
       },
     ]),
     tags: ["Schedule"],
+    description: "Get all active schedule by station id",
   }),
   async (c) => {
     const param = c.req.valid("param")

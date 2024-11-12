@@ -75,8 +75,8 @@ const stationController = api
           type: "metadata",
         },
       ]),
-
       tags: ["Station"],
+      description: "Get station by id",
     }),
     async (c) => {
       const { id } = c.req.valid("param")
