@@ -110,7 +110,29 @@ const sync = async () => {
               console.error(`[SYNC][SCHEDULE][${id}] Error parse`)
             } else {
               const values = parsed.data.data.map((d) => {
-                const [origin, destination] = d.route_name.split("-")
+                let [origin, destination] = d.route_name.split("-")
+
+                const fixName = (name: string) => {
+                  switch (name) {
+                    case "TANJUNGPRIUK":
+                      return "TANJUNG PRIOK"
+                    case "JAKARTAKOTA":
+                      return "JAKARTA KOTA"
+                    case "KAMPUNGBANDAN":
+                      return "KAMPUNG BANDAN"
+                    case "TANAHABANG":
+                      return "TANAH ABANG"
+                    case "PARUNGPANJANG":
+                      return "PARUNG PANJANG"
+                    case "BANDARASOEKARNOHATTA":
+                      return "BANDARA SOEKARNO HATTA"
+                    default:
+                      return name
+                  }
+                }
+
+                origin = fixName(origin)
+                destination = fixName(destination)
 
                 return {
                   id: `sc_krl_${id}_${d.train_id}`.toLowerCase(),
