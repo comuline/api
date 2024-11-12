@@ -8,6 +8,8 @@ import { constructResponse } from "./modules/utils/response"
 export type Bindings = {
   DATABASE_URL: string
   COMULINE_ENV: string
+  UPSTASH_REDIS_REST_TOKEN: string
+  UPSTASH_REDIS_REST_URL: string
 }
 
 export type Variables = {

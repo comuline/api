@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+  # Serverless PostgresSQL
   postgres:
     image: "postgres:15.2-alpine"
     ports:
@@ -17,3 +18,17 @@ services:
       - "5433:80"
     depends_on:
       - postgres
+
+  # Serverless Redis
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  serverless-redis-http:
+    ports:
+      - "8079:80"
+    image: hiett/serverless-redis-http:latest
+    env_file:
+      - ./.env.db
+    depends_on:
+      - redis
