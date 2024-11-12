@@ -61,6 +61,7 @@ export const scheduleTable = pgTable(
     return {
       schedule_idx: uniqueIndex("schedule_idx").on(table.id),
       schedule_station_idx: index("schedule_station_idx").on(table.station_id),
+      schedule_train_idx: index("schedule_train_idx").on(table.train_id),
     }
   },
 )
