@@ -152,7 +152,7 @@ const stationController = api
 
       const filterdStation = res.data.filter((d) => !d.sta_id.includes("WIL"))
 
-      const insertStations = filterdStation.map((s) => {
+      const stations = filterdStation.map((s) => {
         return {
           uid: createStationKey("KRL", s.sta_id),
           id: s.sta_id,
@@ -167,6 +167,53 @@ const stationController = api
           },
         }
       }) satisfies NewStation[]
+
+      const newStations = [
+        /** Bandara Soekarno Hatta */
+        {
+          uid: createStationKey("KRL", "BST"),
+          id: "BST",
+          name: "BANDARA SOEKARNO HATTA",
+          type: "KRL",
+          metadata: {
+            has_schedule: true,
+            origin: {
+              fg_enable: 1,
+              daop: 1,
+            },
+          },
+        },
+        /** Cikampek */
+        {
+          uid: createStationKey("KRL", "CKP"),
+          id: "CKP",
+          name: "CIKAMPEK",
+          type: "LOCAL",
+          metadata: {
+            has_schedule: true,
+            origin: {
+              fg_enable: 1,
+              daop: 1,
+            },
+          },
+        },
+        /** Purwakarta */
+        {
+          uid: createStationKey("KRL", "PWK"),
+          id: "PWK",
+          name: "PURWAKARTA",
+          type: "LOCAL",
+          metadata: {
+            has_schedule: true,
+            origin: {
+              fg_enable: 1,
+              daop: 2,
+            },
+          },
+        },
+      ] satisfies NewStation[]
+
+      const insertStations = [...newStations, ...stations]
 
       await db
         .insert(stationTable)

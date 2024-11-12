@@ -26,7 +26,12 @@ const stationMetadata = z.object({
 
 export type StationMetadata = z.infer<typeof stationMetadata>
 
-export const stationTypeEnum = pgEnum("station_type", ["KRL", "MRT", "LRT"])
+export const stationTypeEnum = pgEnum("station_type", [
+  "KRL",
+  "MRT",
+  "LRT",
+  "LOCAL",
+])
 
 export const stationTable = pgTable(
   "station",

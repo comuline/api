@@ -1,6 +1,6 @@
 {
-  "id": "ebac93b2-10b0-46c7-8348-9827ee12aef5",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "dd1edb26-6f6a-4a0b-856b-8b73207f9055",
+  "prevId": "ebac93b2-10b0-46c7-8348-9827ee12aef5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -291,7 +291,8 @@
       "values": [
         "KRL",
         "MRT",
-        "LRT"
+        "LRT",
+        "LOCAL"
       ]
     }
   },
