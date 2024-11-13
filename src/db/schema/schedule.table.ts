@@ -48,20 +48,28 @@ export const scheduleTable = pgTable(
     departs_at: timestamp("departs_at", {
       mode: "string",
       withTimezone: true,
-    }).defaultNow(),
+    })
+      .notNull()
+      .defaultNow(),
     arrives_at: timestamp("arrives_at", {
       mode: "string",
       withTimezone: true,
-    }).defaultNow(),
+    })
+      .notNull()
+      .defaultNow(),
     metadata: jsonb("metadata").$type<StationScheduleMetadata>(),
     created_at: timestamp("created_at", {
       mode: "string",
       withTimezone: true,
-    }).defaultNow(),
+    })
+      .notNull()
+      .defaultNow(),
     updated_at: timestamp("updated_at", {
       withTimezone: true,
       mode: "string",
-    }).defaultNow(),
+    })
+      .notNull()
+      .defaultNow(),
   },
   (table) => {
     return {
