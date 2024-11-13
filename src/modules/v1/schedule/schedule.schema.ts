@@ -1,10 +1,5 @@
+import { scheduleSchema, StationScheduleMetadata } from "@/db/schema"
 import { z } from "@hono/zod-openapi"
-import {
-  Schedule,
-  scheduleSchema,
-  StationScheduleMetadata,
-  stationSchema,
-} from "@/db/schema"
 
 export const scheduleResponseSchema = z
   .object({
@@ -56,11 +51,11 @@ export const scheduleResponseSchema = z
         },
       } satisfies StationScheduleMetadata,
     }),
-    created_at: stationSchema.shape.created_at.openapi({
+    created_at: scheduleSchema.shape.created_at.openapi({
       format: "date-time",
       example: "2024-03-10T09:55:07.213Z",
     }),
-    updated_at: stationSchema.shape.updated_at.openapi({
+    updated_at: scheduleSchema.shape.updated_at.openapi({
       format: "date-time",
       example: "2024-03-10T09:55:07.213Z",
     }),
