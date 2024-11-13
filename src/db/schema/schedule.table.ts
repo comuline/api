@@ -45,8 +45,14 @@ export const scheduleTable = pgTable(
     train_id: text("train_id").notNull(),
     line: text("line").notNull(),
     route: text("route").notNull(),
-    time_departure: time("time_departure").notNull(),
-    time_at_destination: time("time_at_destination").notNull(),
+    departs_at: timestamp("departs_at", {
+      mode: "string",
+      withTimezone: true,
+    }).defaultNow(),
+    arrives_at: timestamp("arrives_at", {
+      mode: "string",
+      withTimezone: true,
+    }).defaultNow(),
     metadata: jsonb("metadata").$type<StationScheduleMetadata>(),
     created_at: timestamp("created_at", {
       mode: "string",

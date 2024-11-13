@@ -11,7 +11,7 @@ export const routeResponseSchema = z
         station_name: stationResponseSchema.shape.name.openapi({
           example: "ANCOL",
         }),
-        time_departure: scheduleResponseSchema.shape.time_departure,
+        departs_at: scheduleResponseSchema.shape.departs_at,
         created_at: scheduleResponseSchema.shape.created_at,
         updated_at: scheduleResponseSchema.shape.updated_at,
       }),
@@ -29,7 +29,7 @@ export const routeResponseSchema = z
       station_destination_name: z.string().optional().openapi({
         example: "TANJUNGPRIUK",
       }),
-      time_at_destination: scheduleResponseSchema.shape.time_at_destination,
+      arrives_at: scheduleResponseSchema.shape.arrives_at,
     }),
   })
   .openapi("Route")

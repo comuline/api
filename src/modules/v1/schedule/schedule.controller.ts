@@ -67,7 +67,7 @@ const scheduleController = api.openapi(
       .select()
       .from(scheduleTable)
       .where(eq(scheduleTable.station_id, sql.placeholder("station_id")))
-      .orderBy(asc(scheduleTable.time_departure))
+      .orderBy(asc(scheduleTable.departs_at))
       .prepare("query_schedule_by_station_id")
 
     const data = await query.execute({
@@ -81,7 +81,12 @@ const scheduleController = api.openapi(
         metadata: {
           success: true,
         },
-        data: c.var.constructResponse(z.array(scheduleResponseSchema), data),
+        data: c.var.constructResponse(
+          z.array(scheduleResponseSchema),
+          data.map((x) => {
+            return x
+          }),
+        ),
       },
       200,
     )

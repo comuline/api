@@ -129,10 +129,8 @@ const sync = async () => {
                   train_id: d.train_id,
                   line: d.ka_name,
                   route: d.route_name,
-                  time_departure: parseTime(d.time_est).toLocaleTimeString(),
-                  time_at_destination: parseTime(
-                    d.dest_time,
-                  ).toLocaleTimeString(),
+                  departs_at: parseTime(d.time_est).toISOString(),
+                  arrives_at: parseTime(d.dest_time).toISOString(),
                   metadata: {
                     origin: {
                       color: d.color,
@@ -147,8 +145,8 @@ const sync = async () => {
                 .onConflictDoUpdate({
                   target: scheduleTable.id,
                   set: {
-                    time_departure: sql`excluded.time_departure`,
-                    time_at_destination: sql`excluded.time_at_destination`,
+                    departs_at: sql`excluded.departs_at`,
+                    arrives_at: sql`excluded.arrives_at`,
                     metadata: sql`excluded.metadata`,
                     updated_at: new Date().toLocaleString(),
                   },

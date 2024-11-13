@@ -1,5 +1,6 @@
 import { z } from "@hono/zod-openapi"
 import {
+  Schedule,
   scheduleSchema,
   StationScheduleMetadata,
   stationSchema,
@@ -37,12 +38,14 @@ export const scheduleResponseSchema = z
       example: "JAKARTAKOTA-TANJUNGPRIUK",
       description: "Train route",
     }),
-    time_departure: scheduleSchema.shape.time_departure.openapi({
-      example: "06:07:00",
+    departs_at: scheduleSchema.shape.departs_at.openapi({
+      format: "date-time",
+      example: "2024-03-10T09:55:07.213Z",
       description: "Train departure time",
     }),
-    time_at_destination: scheduleSchema.shape.time_at_destination.openapi({
-      example: "06:16:00",
+    arrives_at: scheduleSchema.shape.arrives_at.openapi({
+      format: "date-time",
+      example: "2024-03-10T09:55:09.213Z",
       description: "Train arrival time at destination",
     }),
     metadata: scheduleSchema.shape.metadata.openapi({

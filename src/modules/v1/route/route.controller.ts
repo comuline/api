@@ -71,9 +71,7 @@ const routeController = api.openapi(
             },
           },
         },
-        orderBy: (scheduleTable, { asc }) => [
-          asc(scheduleTable.time_departure),
-        ],
+        orderBy: (scheduleTable, { asc }) => [asc(scheduleTable.departs_at)],
         where: eq(scheduleTable.train_id, sql.placeholder("train_id")),
       })
       .prepare("query_route_by_train_id")
@@ -95,18 +93,11 @@ const routeController = api.openapi(
 
     const response = {
       routes: data.map(
-        ({
-          id,
-          station_id,
-          station,
-          time_departure,
-          created_at,
-          updated_at,
-        }) => ({
+        ({ id, station_id, station, departs_at, created_at, updated_at }) => ({
           id,
           station_id,
           station_name: station.name,
-          time_departure,
+          departs_at,
           created_at,
           updated_at,
         }),
@@ -119,7 +110,7 @@ const routeController = api.openapi(
         station_origin_name: data[0].station.name,
         station_destination_id: data[0].station_destination_id,
         station_destination_name: data[0].station_destination?.name ?? "",
-        time_at_destination: data[0].time_at_destination,
+        arrives_at: data[0].arrives_at,
       },
     } satisfies Route
 
