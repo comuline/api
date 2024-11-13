@@ -36,7 +36,7 @@ const routeController = api.openapi(
       },
     ]),
     tags: ["Route"],
-    description: "Get sequence of station by train id",
+    description: "Get sequence of station stop by train ID",
   }),
   async (c) => {
     const param = c.req.valid("param")

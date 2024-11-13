@@ -73,7 +73,7 @@ const stationController = api
         params: z.object({
           id: z
             .string()
-            .min(2)
+            .min(1)
             .openapi({
               param: {
                 name: "id",
@@ -96,7 +96,7 @@ const stationController = api
         },
       ]),
       tags: ["Station"],
-      description: "Get station by id",
+      description: "Get station by ID",
     }),
     async (c) => {
       const param = c.req.valid("param")
@@ -124,7 +124,18 @@ const stationController = api
         .where(eq(stationTable.id, sql.placeholder("id")))
         .prepare("query_station_by_id")
 
-      const data = await query.execute({ id: param.id })
+      const data = await query.execute({ id: param.id.toLocaleUpperCase() })
+
+      if (data.length === 0)
+        return c.json(
+          {
+            metadata: {
+              success: false,
+              message: "Station not found",
+            },
+          },
+          404,
+        )
 
       await cache.set(data[0], getSecsToMidnight())
 

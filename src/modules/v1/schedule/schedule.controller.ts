@@ -36,7 +36,7 @@ const scheduleController = api.openapi(
       },
     ]),
     tags: ["Schedule"],
-    description: "Get all schedule by station id",
+    description: "Get all schedule by station ID",
   }),
   async (c) => {
     const param = c.req.valid("param")
