@@ -43,6 +43,13 @@
       "when": 1731487109892,
       "tag": "0005_rare_senator_kelly",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1731489275577,
+      "tag": "0006_hesitant_hedge_knight",
+      "breakpoints": true
     }
   ]
 }
