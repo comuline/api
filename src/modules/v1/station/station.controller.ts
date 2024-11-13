@@ -1,9 +1,9 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { eq, sql } from "drizzle-orm"
-import { Station, stationTable } from "../../../db/schema"
-import { buildResponseSchemas } from "../../../utils/response"
-import { getSecsToMidnight } from "../../../utils/time"
-import { createAPI } from "../../api"
+import { Station, stationTable } from "@/db/schema"
+import { buildResponseSchemas } from "@/utils/response"
+import { getSecsToMidnight } from "@/utils/time"
+import { createAPI } from "@/modules/api"
 import { Cache } from "../cache"
 import { stationResponseSchema } from "./station.schema"
 

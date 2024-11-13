@@ -1,11 +1,11 @@
 import { createRoute, z } from "@hono/zod-openapi"
-import { asc, eq, sql } from "drizzle-orm"
-import { scheduleTable, stationTable } from "../../../db/schema"
-import { createAPI } from "../../api"
-import { buildResponseSchemas } from "../../../utils/response"
+import { eq, sql } from "drizzle-orm"
+import { scheduleTable } from "@/db/schema"
+import { buildResponseSchemas } from "@/utils/response"
+import { getSecsToMidnight } from "@/utils/time"
+import { createAPI } from "@/modules/api"
 import { Cache } from "../cache"
 import { Route, routeResponseSchema } from "./route.schema"
-import { getSecsToMidnight } from "../../../utils/time"
 
 const api = createAPI()
 

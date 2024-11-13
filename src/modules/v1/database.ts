@@ -1,6 +1,6 @@
 import { neonConfig, Pool } from "@neondatabase/serverless"
 import { drizzle, NeonDatabase } from "drizzle-orm/neon-serverless"
-import * as schema from "../../db/schema"
+import * as schema from "@/db/schema"
 
 export class Database<
   T extends {
