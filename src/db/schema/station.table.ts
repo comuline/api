@@ -13,7 +13,7 @@ import { z } from "zod"
 /** Station Metadata */
 const stationMetadata = z.object({
   /** Comuline metadata */
-  has_schedule: z.boolean().nullable(),
+  active: z.boolean().optional(),
   /** Origin metadata */
   origin: z.object({
     /** KRL */

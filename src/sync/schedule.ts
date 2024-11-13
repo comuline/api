@@ -170,7 +170,7 @@ const sync = async () => {
             metadata: metadata
               ? {
                   ...metadata,
-                  has_schedule: false,
+                  active: false,
                 }
               : null,
             updated_at: new Date().toLocaleString(),

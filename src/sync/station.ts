@@ -65,7 +65,7 @@ const sync = async () => {
       name: s.sta_name,
       type: "KRL",
       metadata: {
-        has_schedule: true,
+        active: true,
         origin: {
           fg_enable: s.fg_enable,
           daop: s.group_wil === 0 ? 1 : s.group_wil,
@@ -82,7 +82,7 @@ const sync = async () => {
       name: "BANDARA SOEKARNO HATTA",
       type: "KRL",
       metadata: {
-        has_schedule: true,
+        active: true,
         origin: {
           fg_enable: 1,
           daop: 1,
@@ -96,7 +96,7 @@ const sync = async () => {
       name: "CIKAMPEK",
       type: "LOCAL",
       metadata: {
-        has_schedule: true,
+        active: true,
         origin: {
           fg_enable: 1,
           daop: 1,
@@ -110,7 +110,7 @@ const sync = async () => {
       name: "PURWAKARTA",
       type: "LOCAL",
       metadata: {
-        has_schedule: true,
+        active: true,
         origin: {
           fg_enable: 1,
           daop: 2,

@@ -19,7 +19,7 @@ export const stationResponseSchema = z
     metadata: stationSchema.shape.metadata.openapi({
       type: "object",
       example: {
-        has_schedule: true,
+        active: true,
         origin: {
           daop: 1,
           fg_enable: 1,
