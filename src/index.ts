@@ -4,6 +4,7 @@ import v1 from "./modules/v1"
 import { Database } from "./modules/v1/database"
 import { HTTPException } from "hono/http-exception"
 import { constructResponse } from "./utils/response"
+import { trimTrailingSlash } from "hono/trailing-slash"
 
 export type Bindings = {
   DATABASE_URL: string
@@ -38,6 +39,7 @@ const app = api
       },
     ],
   }))
+  .use(trimTrailingSlash())
   .use(async (c, next) => {
     const { db } = new Database({
       COMULINE_ENV: c.env.COMULINE_ENV,
@@ -58,7 +60,9 @@ const app = api
     }),
   )
   .get("/status", (c) => c.json({ status: "ok" }))
-  .notFound((c) => c.redirect("/docs"))
+  .notFound(() => {
+    throw new HTTPException(404, { message: "Not found" })
+  })
   .onError((err, c) => {
     if (err instanceof HTTPException) {
       return c.json(
