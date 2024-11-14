@@ -5,7 +5,7 @@ import { Database } from "./modules/v1/database"
 import { HTTPException } from "hono/http-exception"
 import { constructResponse } from "./utils/response"
 import { trimTrailingSlash } from "hono/trailing-slash"
-
+import { cors } from "hono/cors"
 const api = createAPI()
 
 const app = api
@@ -23,6 +23,14 @@ const app = api
     ],
   }))
   .use(trimTrailingSlash())
+  .use("*", async (c, next) =>
+    cors({
+      origin: (o) => o,
+      allowMethods: ["GET", "OPTIONS", "POST", "PUT", "DELETE"],
+      allowHeaders: ["Origin", "Content-Type"],
+      credentials: true,
+    })(c, next),
+  )
   .use(async (c, next) => {
     const { db } = new Database({
       COMULINE_ENV: c.env.COMULINE_ENV,
