@@ -18,6 +18,21 @@ export const stationResponseSchema = z
     }),
     metadata: stationSchema.shape.metadata.openapi({
       type: "object",
+      properties: {
+        origin: {
+          type: "object",
+          properties: {
+            daop: {
+              type: "number",
+              nullable: true,
+            },
+            fg_enable: {
+              type: "number",
+              nullable: true,
+            },
+          },
+        },
+      },
       example: {
         active: true,
         origin: {

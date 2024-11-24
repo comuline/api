@@ -45,6 +45,17 @@ export const scheduleResponseSchema = z
     }),
     metadata: scheduleSchema.shape.metadata.openapi({
       type: "object",
+      properties: {
+        origin: {
+          type: "object",
+          properties: {
+            color: {
+              type: "string",
+              nullable: true,
+            },
+          },
+        },
+      },
       example: {
         origin: {
           color: "#DD0067",
