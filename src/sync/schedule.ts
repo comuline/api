@@ -148,7 +148,7 @@ const sync = async () => {
                     departs_at: sql`excluded.departs_at`,
                     arrives_at: sql`excluded.arrives_at`,
                     metadata: sql`excluded.metadata`,
-                    updated_at: new Date().toLocaleString(),
+                    updated_at: new Date().toISOString(),
                   },
                 })
                 .returning()
@@ -173,7 +173,7 @@ const sync = async () => {
                   active: false,
                 }
               : null,
-            updated_at: new Date().toLocaleString(),
+            updated_at: new Date().toISOString(),
           }
           await db
             .update(stationTable)

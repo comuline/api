@@ -127,7 +127,7 @@ const sync = async () => {
     .onConflictDoUpdate({
       target: stationTable.uid,
       set: {
-        updated_at: new Date().toLocaleString(),
+        updated_at: new Date().toISOString(),
         uid: sql`excluded.uid`,
         id: sql`excluded.id`,
         name: sql`excluded.name`,
