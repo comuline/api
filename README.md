@@ -1,6 +1,6 @@
 # @comuline/api
 
-An API to get the schedule of KRL commuter line in Jakarta and Yogyakarta using [Elsyia](https://elysiajs.com/) and [Bun](https://bun.sh/), deployed to [Render](https://render.com/). This API is primarily used on the [web app](https://comuline.com/) ([source code](https://github.com/comuline/web)).
+An API to get the schedule of KRL commuter line in Jakarta and Yogyakarta using [Hono](https://hono.dev/) and [Bun](https://bun.sh/), deployed to [Cloudflare Workers](https://workers.cloudflare.com/). This API is primarily used on the [web app](https://comuline.com/) ([source code](https://github.com/comuline/web)).
 
 ### How does it work?
 
@@ -8,11 +8,11 @@ This API uses a daily cron job (at 00:00) to fetch the schedule of KRL commuter 
 
 ### Technology stacks
 
-1. [Elsyia](https://elysiajs.com/) API framework
+1. [Hono](https://hono.dev/) API framework
 2. [Bun](https://bun.sh/) runtime
-3. PostgresSQL ([Neon](https://neon.tech/))
-4. Redis ([Upstash](https://upstash.com/))
-5. [Render](https://render.com/) deployment platform
+3. (Serverless) PostgresSQL ([Neon](https://neon.tech/))
+4. (Serverless) Redis ([Upstash](https://upstash.com/))
+5. [Cloudflare Workers](https://workers.cloudflare.com/) deployment platform
 6. [Drizzle](https://orm.drizzle.team/) ORM
 
 ## Getting Started
@@ -31,42 +31,44 @@ git clone https://github.com/comuline/api.git
 bun install
 ```
 
-3. Run database locally
+3. Copy the `.dev.example.vars` to `.dev.vars`
+
+```
+cp .dev.example.vars .dev.vars
+```
+
+4. Generate `UPSTASH_REDIS_REST_TOKEN` using `openssl rand -hex 32` and copy it to your `.dev.vars` file
+
+5. Run database locally
 
 ```bash
 docker-compose up -d
 ```
 
-4. Copy the `.env.example` to `.env`
-
-```
-cp .env.example .env
-```
-
-5. Run the database migration
+6. Run the database migration
 
 ```bash
-bun db:generate && bun db:migrate
+bun run migrate:apply
 ```
 
-6. Sync the data and populate it into your local database (once only as you needed)
+7. Sync the data and populate it into your local database (once only as you needed)
 
 ```bash
 # Please do this in order
 # 1. Sync station data and wait until it's done
-curl --request POST --url http://localhost:3001/v1/station/
+bun run sync:station
 # 2. Sync schedule data
-curl --request POST --url http://localhost:3001/v1/schedule/
+bun run sync:schedule
 ```
 
 ### Deployment
 
-1. Create a new PostgreSQL database in [Neon](https://neon.tech/) and copy the connection string value as `DATABASE_URL` in your `.env` file
+1. Create a new PostgreSQL database in [Neon](https://neon.tech/) and copy the connection string value as `DATABASE_URL` in your `.production.vars` file
 
 2. Run the database migration
 
 ```bash
-bun db:generate && bun db:migrate
+bun run migrate:apply
 ```
 
 3. Sync the data and populate it into your remote database (once only as you needed)
@@ -74,70 +76,31 @@ bun db:generate && bun db:migrate
 ```bash
 # Please do this in order
 # 1. Sync station data and wait until it's done
-curl --request POST --url http://localhost:3001/v1/station/
+bun run sync:station
 # 2. Sync schedule data
-curl --request POST --url http://localhost:3001/v1/schedule/
-
+bun run sync:schedule
 ```
 
-4. Generate `SYNC_TOKEN` (This is used in production level only to prevent unauthorized access to your `POST /v1/station` and `POST /v1/schedule` endpoint)
+4. Add `COMULINE_ENV` to your `.production.vars` file
 
-```bash
-openssl rand -base64 32
-# Copy the output value as a `SYNC_TOKEN`
+```
+COMULINE_ENV=production
 ```
 
-2. Create a new Redis database in [Upstash](https://upstash.com/) and copy the connection string value as `REDIS_URL`
+5. Create a new Redis database in [Upstash](https://upstash.com/) and copy the value of `UPSTASH_REDIS_REST_TOKEN` and `UPSTASH_REDIS_REST_URL` to your `.production.vars` file
 
-3. Create a `Web Service` in [Render](https://render.com/), copy the `DATABASE_URL`, `REDIS_URL`, and `SYNC_TOKEN` as environment variables, and deploy the application.
-
-4. Set the cron job to fetch the schedule data using [Cron-Job](https://cron-job.org/en/). Don't forget to set the `SYNC_TOKEN` as a header in your request. Add the `?from_cron=true` query parameter to flag the request as a cron job request.
+6. Save your `.production.vars` file to your environment variables in your Cloudflare Workers using `wrangler`
 
 ```bash
-# Example
-curl --request POST --url https://your-service-name.onrender.com/v1/station?from_cron=true -H "Authorization: Bearer ${SYNC_TOKEN}"
-curl --request POST --url https://your-service-name.onrender.com/v1/schedule?from_cron=true -H "Authorization: Bearer ${SYNC_TOKEN}"
+bunx wrangler secret put --env production $(cat .production.vars)
+```
+
+6. Deploy the API to Cloudflare Workers
+
+```bash
+bun run deploy
 ```
 
 ### Database schema
 
-> **Station**
-
-| Column Name  | Data Type | Description                     |
-| ------------ | --------- | ------------------------------- |
-| id           | TEXT      | Primary key (Station ID)        |
-| name         | TEXT      | Station name                    |
-| daop         | INTEGER   | Station regional operation code |
-| fgEnable     | BOOLEAN   | -                               |
-| haveSchedule | BOOLEAN   | Schedule availability status    |
-| updatedAt    | TEXT      | Last updated date               |
-
-> **Schedule**
-
-| Column Name     | Data Type | Description                         |
-| --------------- | --------- | ----------------------------------- |
-| id              | TEXT      | Primary key (Station ID + Train ID) |
-| stationId       | TEXT      | Station ID                          |
-| trainId         | TEXT      | Train ID                            |
-| line            | TEXT      | Train commuter line                 |
-| route           | TEXT      | Train route                         |
-| color           | TEXT      | Commuter line color                 |
-| destination     | TEXT      | Train destination                   |
-| timeEstimated   | TIME      | Estimated time                      |
-| destinationTime | TIME      | Destination time                    |
-| updatedAt       | TEXT      | Last updated date                   |
-
-> **Sync**
-
-| Column Name | Data Type | Description                            |
-| ----------- | --------- | -------------------------------------- |
-| id          | TEXT      | Primary key (Sync ID)                  |
-| n           | BIGINT    | n of sync                              |
-| type        | ENUM      | Sync type (manual, cron)               |
-| status      | ENUM      | Sync status (PENDING, SUCCESS, FAILED) |
-| item        | ENUM      | Sync item (station, schedule)          |
-| duration    | BIGINT    | Sync duration                          |
-| message     | TEXT      | Sync message (if status failed)        |
-| startedAt   | TEXT      | Sync started date                      |
-| endedAt     | TEXT      | Sync ended date                        |
-| createdAt   | TEXT      | Sync created date                      |
+> TBD
