@@ -5,6 +5,3 @@ minify = true
 
 [limits]
 cpu_ms = 30000
-
-
-
