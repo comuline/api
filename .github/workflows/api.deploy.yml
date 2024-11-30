@@ -1,0 +1,28 @@
+name: Deploy API to Cloudflare Workers
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installing Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install package deps
+        run: bun i
+
+      - name: Build package
+        run: bun run build
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --minify src/index.ts
