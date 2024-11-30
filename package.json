@@ -12,7 +12,7 @@
     "docker:up": "docker-compose -p comuline-api up -d",
     "docker:down": "docker-compose down",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "wrangler deploy --minify src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts --name comuline-api",
     "migrate:drop": "drizzle-kit drop",
     "migrate:generate": "drizzle-kit generate",
     "migrate:apply": "bun run src/db/migrate.ts",
