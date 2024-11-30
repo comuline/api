@@ -63,15 +63,17 @@ bun run sync:schedule
 
 ### Deployment
 
-1. Create a new PostgreSQL database in [Neon](https://neon.tech/) and copy the connection string value as `DATABASE_URL` in your `.production.vars` file
+1. Rename the `wrand.example.toml` to `wrangler.toml` and fill the necessary information
 
-2. Run the database migration
+2. Create a new PostgreSQL database in [Neon](https://neon.tech/) and copy the connection string value as `DATABASE_URL` in your `.production.vars` file
+
+3. Run the database migration
 
 ```bash
 bun run migrate:apply
 ```
 
-3. Sync the data and populate it into your remote database (once only as you needed)
+4. Sync the data and populate it into your remote database (once only as you needed)
 
 ```bash
 # Please do this in order
@@ -81,21 +83,21 @@ bun run sync:station
 bun run sync:schedule
 ```
 
-4. Add `COMULINE_ENV` to your `.production.vars` file
+6. Add `COMULINE_ENV` to your `.production.vars` file
 
 ```
 COMULINE_ENV=production
 ```
 
-5. Create a new Redis database in [Upstash](https://upstash.com/) and copy the value of `UPSTASH_REDIS_REST_TOKEN` and `UPSTASH_REDIS_REST_URL` to your `.production.vars` file
+6. Create a new Redis database in [Upstash](https://upstash.com/) and copy the value of `UPSTASH_REDIS_REST_TOKEN` and `UPSTASH_REDIS_REST_URL` to your `.production.vars` file
 
-6. Save your `.production.vars` file to your environment variables in your Cloudflare Workers using `wrangler`
+7. Save your `.production.vars` file to your environment variables in your Cloudflare Workers using `wrangler`
 
 ```bash
 bunx wrangler secret put --env production $(cat .production.vars)
 ```
 
-6. Deploy the API to Cloudflare Workers
+8. Deploy the API to Cloudflare Workers
 
 ```bash
 bun run deploy
