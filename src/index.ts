@@ -51,8 +51,8 @@ const app = api
       },
     }),
   )
-  .get("/", (c) => c.redirect("/docs"))
   .get("/status", (c) => c.json({ status: "ok" }))
+  .get("/", (c) => c.redirect("/docs"))
   .notFound(() => {
     throw new HTTPException(404, { message: "Not found" })
   })
