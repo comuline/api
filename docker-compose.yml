@@ -1,21 +1,34 @@
 version: "3.9"
 
 services:
+  # Serverless PostgresSQL
   postgres:
     image: "postgres:15.2-alpine"
-    restart: always
-    container_name: "comuline-db"
     ports:
       - "5432:5432"
-    volumes:
-      - db:/var/lib/postgresql/data
     env_file:
       - ./.env.db
+  pg_proxy:
+    image: ghcr.io/neondatabase/wsproxy:latest
+    environment:
+      APPEND_PORT: "postgres:5432"
+      ALLOW_ADDR_REGEX: ".*"
+      LOG_TRAFFIC: "true"
+    ports:
+      - "5433:80"
+    depends_on:
+      - postgres
+
+  # Serverless Redis
   redis:
     image: redis
-    container_name: "comuline-cache"
     ports:
       - "6379:6379"
-
-volumes:
-  db:
+  serverless-redis-http:
+    ports:
+      - "8079:80"
+    image: hiett/serverless-redis-http:latest
+    env_file:
+      - ./.env.db
+    depends_on:
+      - redis

@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "schedule_train_idx" ON "schedule" USING btree ("train_id");

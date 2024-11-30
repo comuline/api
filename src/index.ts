@@ -1,32 +1,83 @@
-import { Elysia } from "elysia"
-import controllers from "./controllers"
-import { logger } from "./commons/utils/log"
-import swagger from "./commons/libs/swagger"
-import { rateLimit } from "elysia-rate-limit"
+import { apiReference } from "@scalar/hono-api-reference"
+import { createAPI } from "./modules/api"
+import v1 from "./modules/v1"
+import { Database } from "./modules/v1/database"
+import { HTTPException } from "hono/http-exception"
+import { constructResponse } from "./utils/response"
+import { trimTrailingSlash } from "hono/trailing-slash"
+import { cors } from "hono/cors"
+const api = createAPI()
 
-const app = new Elysia()
-  .use(controllers)
-  .get("/", (ctx) => {
-    ctx.set.redirect = "/docs"
-  })
-  .get("/health", () => {
-    return {
-      status: 200,
-      data: {
-        message: "OK",
+const app = api
+  .doc("/openapi", (c) => ({
+    openapi: "3.0.0",
+    info: {
+      version: "1.0.0",
+      title: "Comuline API",
+    },
+    servers: [
+      {
+        url: new URL(c.req.url).origin,
+        description: c.env.COMULINE_ENV,
       },
-    }
+    ],
+  }))
+  .use(trimTrailingSlash())
+  .use("*", async (c, next) =>
+    cors({
+      origin: (o) => o,
+      allowMethods: ["GET", "OPTIONS", "POST", "PUT", "DELETE"],
+      allowHeaders: ["Origin", "Content-Type"],
+      credentials: true,
+    })(c, next),
+  )
+  .use(async (c, next) => {
+    const { db } = new Database({
+      COMULINE_ENV: c.env.COMULINE_ENV,
+      DATABASE_URL: c.env.DATABASE_URL,
+    })
+    c.set("db", db)
+    c.set("constructResponse", constructResponse)
+    await next()
   })
-  .use(swagger())
-  .use(rateLimit({ max: 5 }))
+  .route("/v1", v1)
+  .use(
+    "/docs",
+    apiReference({
+      cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference",
+      spec: {
+        url: "/openapi",
+      },
+    }),
+  )
+  .get("/", (c) => c.redirect("/docs"))
+  .get("/status", (c) => c.json({ status: "ok" }))
+  .notFound(() => {
+    throw new HTTPException(404, { message: "Not found" })
+  })
+  .onError((err, c) => {
+    if (err instanceof HTTPException) {
+      return c.json(
+        {
+          metadata: {
+            success: false,
+            message: err.message,
+            cause: err.cause,
+          },
+        },
+        err.status,
+      )
+    }
+    return c.json(
+      {
+        metadata: {
+          success: false,
+          message: err.message,
+          cause: err.cause,
+        },
+      },
+      500,
+    )
+  })
 
-try {
-  app.listen(process.env.NODE_ENV === "development" ? 3001 : 3000)
-} catch (e) {
-  logger.error("[MAIN] Error starting server", e)
-  process.exit(1)
-}
-
-logger.info(
-  `[MAIN] Service is running at ${app.server?.hostname}:${app.server?.port}`,
-)
+export default app
