@@ -6,6 +6,7 @@ import { HTTPException } from "hono/http-exception"
 import { constructResponse } from "./utils/response"
 import { trimTrailingSlash } from "hono/trailing-slash"
 import { cors } from "hono/cors"
+
 const api = createAPI()
 
 const app = api

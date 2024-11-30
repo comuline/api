@@ -19,9 +19,13 @@ jobs:
 
       - name: Build package
         run: bun run build
+        env:
+          COMULINE_ENV: production
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
+        env:
+          COMULINE_ENV: production
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
