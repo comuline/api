@@ -41,7 +41,6 @@ yarn-error.log*
 package-lock.json
 **/*.bun
 .env
-wrangler.toml
 .wrangler
 .dev.vars
 
