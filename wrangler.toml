@@ -9,5 +9,5 @@ cpu_ms = 30000
 [placement]
 mode = "smart"
 
-[observability]
+[observability.logs]
 enabled = true
