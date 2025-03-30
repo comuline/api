@@ -10,6 +10,8 @@ const createStationKey = (type: StationType, id: string) =>
 const sync = async () => {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL env is missing")
   if (!process.env.COMULINE_ENV) throw new Error("COMULINE_ENV env is missing")
+  if (!process.env.KRL_ENDPOINT_BASE_URL)
+    throw new Error("KRL_ENDPOINT_BASE_URL env is missing")
 
   const { db } = new Database({
     COMULINE_ENV: process.env.COMULINE_ENV,
@@ -29,7 +31,7 @@ const sync = async () => {
     ),
   })
 
-  const url = "https://api-partner.krl.co.id/krlweb/v1/krl-station"
+  const url = `${process.env.KRL_ENDPOINT_BASE_URL}/krl-station`
 
   const req = await fetch(url, {
     method: "GET",
