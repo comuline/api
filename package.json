@@ -7,7 +7,7 @@
   },
   "version": "2.0",
   "scripts": {
-    "dev": "wrangler dev src/index.ts --port 3001",
+    "dev": "wrangler dev",
     "build": "tsup --clean",
     "docker:up": "docker-compose -p comuline-api up -d",
     "docker:down": "docker-compose down",

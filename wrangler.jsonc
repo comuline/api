@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "comuline-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-03-05",
+  "send_metrics": false,
+  "minify": true,
+  "limits": {
+    "cpu_ms": 300000,
+  },
+  "dev": {
+    "port": 3001,
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "placement": {
+    "mode": "smart",
+  },
+}
