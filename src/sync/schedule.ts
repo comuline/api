@@ -14,6 +14,8 @@ import { KAI_HEADERS } from "./headers"
 const sync = async () => {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL env is missing")
   if (!process.env.COMULINE_ENV) throw new Error("COMULINE_ENV env is missing")
+  if (!process.env.KRL_ENDPOINT_BASE_URL)
+    throw new Error("KRL_ENDPOINT_BASE_URL env is missing")
 
   const { db } = new Database({
     COMULINE_ENV: process.env.COMULINE_ENV,
@@ -55,7 +57,7 @@ const sync = async () => {
       batch.map(async ({ id, metadata }) => {
         await sleep(5000)
 
-        const url = `https://api-partner.krl.co.id/krlweb/v1/schedule?stationid=${id}&timefrom=00:00&timeto=23:00`
+        const url = `${process.env.KRL_ENDPOINT_BASE_URL}/schedule?stationid=${id}&timefrom=00:00&timeto=23:00`
 
         console.info(`[SYNC][SCHEDULE][${id}] Send preflight`)
         const optionsResponse = await fetch(url, {
