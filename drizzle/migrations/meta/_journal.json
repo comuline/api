@@ -57,6 +57,13 @@
       "when": 1732445107060,
       "tag": "0007_naive_pepper_potts",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1743344871226,
+      "tag": "0008_wooden_purple_man",
+      "breakpoints": true
     }
   ]
 }
