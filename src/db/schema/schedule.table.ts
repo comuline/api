@@ -14,6 +14,7 @@ import { relations } from "drizzle-orm"
 
 export const stationScheduleMetadata = z.object({
   /** Origin metadata */
+  active_schedule: z.boolean().default(true),
   origin: z.object({
     color: z.string().nullable(),
   }),
