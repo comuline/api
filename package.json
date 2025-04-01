@@ -20,7 +20,8 @@
     "format:check": "prettier -c .",
     "prepare": "husky",
     "sync:schedule": "bun run --env-file .dev.vars src/sync/schedule.ts",
-    "sync:station": "bun run --env-file .dev.vars src/sync/station.ts"
+    "sync:station": "bun run --env-file .dev.vars src/sync/station.ts",
+    "sync:mrt": "bun run --env-file .dev.vars src/sync/mrt.ts"
   },
   "dependencies": {
     "@hono/zod-openapi": "^0.16.0",
