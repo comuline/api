@@ -46,6 +46,11 @@ export const scheduleResponseSchema = z
     metadata: scheduleSchema.shape.metadata.openapi({
       type: "object",
       properties: {
+        active_schedule: {
+          type: "boolean",
+          default: true,
+          nullable: true,
+        },
         origin: {
           type: "object",
           properties: {
